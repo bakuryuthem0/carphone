@@ -1,0 +1,20 @@
+.contCentrado
+{
+	float: none;
+	display: block;
+	margin: 0 auto;
+}
+.contDeColor
+{
+	border-radius: 8px;
+	border: 1px solid black;
+	padding: 1em 2em;
+}
+.login-form .login-input.form-control
+{
+	background: #F0F0E9;
+}
+.responseAjax
+{
+	display: none;
+}

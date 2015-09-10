@@ -78,3 +78,10 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('check_no_auth',function(){
+	if(Auth::check())
+	{
+		return Redirect::to('/');
+	}
+});

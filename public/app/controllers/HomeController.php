@@ -15,9 +15,11 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
+	public function getIndex()
 	{
-		return View::make('hello');
+		$title = "Titulo | Nombre";
+		return View::make('home.index')
+		->with('title',$title);
 	}
 
 }

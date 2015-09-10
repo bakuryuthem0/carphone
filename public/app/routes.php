@@ -11,7 +11,14 @@
 |
 */
 
-Route::get('/', function()
+Route::get('/','HomeController@getIndex');
+
+Route::group(array('before' => 'check_no_auth'),function()
 {
-	return View::make('hello');
+	Route::get('iniciar-sesion','AuthController@getLogin');
+	Route::post('iniciar-sesion/enviar','AuthController@postLogin');
+
+	Route::get('registrarse','AuthController@getRegister');
+	Route::post('registrarse/enviar','AuthController@postRegister');
+
 });
