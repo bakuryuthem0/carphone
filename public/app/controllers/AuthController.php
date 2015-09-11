@@ -62,4 +62,36 @@ class AuthController extends BaseController {
 		return View::make('home.register')
 		->with('title',$title);
 	}
+	public function postRegister()
+	{
+		$inp 	= Input::all();
+		$rules	= array(
+			'user' => 'required|min:4|unique:users,username',
+			'pass' => 'required|min:4|confirmed',
+			'email'=> 'required|min:4|unique:users,email|email' 
+		);
+		$msg 	= array(
+			'required' => 'El campo es obligatorio',
+			'confirmed'=> 'Las contraseñas no concuerdan', 
+			'min'	   => 'El campo es muy corto minimo 4 caracteres',
+			'email'	   => 'Formato invalido para el campo' 
+		);
+		$validator = Validator::make($inp, $rules, $msg);
+		if ($validator->fails()) {
+			return Redirect::back()->withErrors($validator)->withInput();
+		}
+		$user = new User;
+		$user->username = $inp['user'];
+		$user->password = $inp['pass'];
+		$user->email 	= $inp['email'];
+		if ($user->save()) {
+			Session::flash('success', 'Cuenta creada satisfactoriamente');
+			return Redirect::to('iniciar-sesion');
+		}else
+		{
+			Session::flash('success', 'Error al crear la cuenta');
+			return Redirect::back();
+		}
+
+	}
 }
