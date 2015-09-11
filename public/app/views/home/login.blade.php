@@ -7,6 +7,11 @@
 				<div class="col-xs-12 col-md-6 contCentrado contDeColor">
 					<div class="login-form"><!--login form-->
 						<legend><h2>Inicie Sesion en su cuenta</h2></legend>
+						@if(Session::has('success'))
+							<div class="alert alert-success">
+								<p>{{ Session::get('success') }}</p>
+							</div>
+						@endif
 						<div class="alert responseAjax">
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						</div>

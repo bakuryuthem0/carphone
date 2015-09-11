@@ -93,7 +93,7 @@
 									<li><a href="cart. html"><i class="fa fa-shopping-cart"></i> Carrito</a></li>
 								@else
 									<li><a href="{{ URL::to('registrarse') }}"><i class="fa fa-user"></i> Registrarse</a></li>
-									<li><a href="{{ URL::to('iniciar-sesion') }}"><i class="fa fa-lock"></i> Login</a></li>
+									<li><a href="#!" data-toggle="modal" data-target="#myModal"><i class="fa fa-lock"></i> Login</a></li>
 								@endif
 
 							</ul>
@@ -127,7 +127,7 @@
 											<li><a href="checkout.html">Checkout</a></li> 
 											<li><a href="cart.html">Cart</a></li> 
 										@else
-											<li><a href="{{ URL::to('iniciar-sesion') }}">Login</a></li> 
+											<li><a href="#!" data-toggle="modal" data-target="#myModal">Login</a></li> 
 										@endif
                                     </ul>
                                 </li> 
@@ -145,7 +145,7 @@
 						<div class="search_box pull-right">
 							<div class="input-group">
 							  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-							  <input type="text" class="form-control" placeholder="Buscar" aria-describedby="basic-addon1">
+							  <input type="text" class="input form-control" placeholder="Buscar" aria-describedby="basic-addon1">
 							</div>
 						</div>
 					</div>
@@ -239,7 +239,43 @@
 		
 	</footer><!--/Footer-->
 	
-
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content contDeColor">
+	      <div class="login-form"><!--login form-->
+			<legend><h2>Inicie Sesion en su cuenta</h2></legend>
+			@if(Session::has('success'))
+				<div class="alert alert-success">
+					<p>{{ Session::get('success') }}</p>
+				</div>
+			@endif
+			<div class="alert responseAjax">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			</div>
+				<fieldset>
+					<label for="">Usuario</label>
+					<input type="text" placeholder="Usuario" class="login-input form-control username">
+				</fieldset>
+				<br>
+				<fieldset>
+					<input type="password" placeholder="Contraseña" class="login-input form-control password">
+				</fieldset>
+				<span class="checkbox">
+					<input type="checkbox" class="checkbox checkbox-login"> 
+					Recordar
+				</span>
+				<button type="submit" class="btn btn-default login">Login</button>
+				<br>
+				<br>
+				<a href="{{ URL::to('registrarse') }}">¿No Tienes cuenta? Registrate</a>
+				<br>
+				<a href="">¿Olvidaste tu contraseña?</a>
+		</div><!--/login form-->
+	</div>
+	    </div>
+	  </div>
+	</div>
   
 	{{ HTML::script('js/jquery.js') }}
 	{{ HTML::script('js/bootstrap.min.js') }}
