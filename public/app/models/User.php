@@ -48,5 +48,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		return $this->email;
 	}
+	function getRememberToken(){
+		$foo = null;
+	}
+	function setRememberToken($token){
+		$foo = null;
+	}
+	function getRememberTokenName(){	
+		$foo = null;
+	}
+
+	
 
 }
