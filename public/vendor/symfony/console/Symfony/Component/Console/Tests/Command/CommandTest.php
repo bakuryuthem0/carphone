@@ -131,6 +131,8 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $ret = $command->setHelp('help1');
         $this->assertEquals($command, $ret, '->setHelp() implements a fluent interface');
         $this->assertEquals('help1', $command->getHelp(), '->setHelp() sets the help');
+        $command->setHelp('');
+        $this->assertEquals('description', $command->getHelp(), '->getHelp() fallback to the description');
     }
 
     public function testGetProcessedHelp()
@@ -165,15 +167,6 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $command->setApplication($application);
         $formatterHelper = new FormatterHelper();
         $this->assertEquals($formatterHelper->getName(), $command->getHelper('formatter')->getName(), '->getHelper() returns the correct helper');
-    }
-
-    public function testGet()
-    {
-        $application = new Application();
-        $command = new \TestCommand();
-        $command->setApplication($application);
-        $formatterHelper = new FormatterHelper();
-        $this->assertEquals($formatterHelper->getName(), $command->getHelper('formatter')->getName(), '->__get() returns the correct helper');
     }
 
     public function testMergeApplicationDefinition()
@@ -318,6 +311,9 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $output->writeln('from the code...');
     }
 
+    /**
+     * @group legacy
+     */
     public function testLegacyAsText()
     {
         $this->iniSet('error_reporting', -1 & E_USER_DEPRECATED);
@@ -329,6 +325,9 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEqualsFile(self::$fixturesPath.'/command_astext.txt', $command->asText(), '->asText() returns a text representation of the command');
     }
 
+    /**
+     * @group legacy
+     */
     public function testLegacyAsXml()
     {
         $this->iniSet('error_reporting', -1 & E_USER_DEPRECATED);

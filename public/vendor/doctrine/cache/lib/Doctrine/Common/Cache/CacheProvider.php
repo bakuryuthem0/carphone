@@ -83,6 +83,10 @@ abstract class CacheProvider implements Cache, FlushableCache, ClearableCache, M
      */
     public function fetchMultiple(array $keys)
     {
+        if (empty($keys)) {
+            return array();
+        }
+        
         // note: the array_combine() is in place to keep an association between our $keys and the $namespacedKeys
         $namespacedKeys = array_combine($keys, array_map(array($this, 'getNamespacedId'), $keys));
         $items          = $this->doFetchMultiple($namespacedKeys);
@@ -225,7 +229,7 @@ abstract class CacheProvider implements Cache, FlushableCache, ClearableCache, M
      *
      * @param string $id The id of the cache entry to fetch.
      *
-     * @return string|boolean The cached data or FALSE, if no cache entry exists for the given id.
+     * @return mixed|boolean The cached data or FALSE, if no cache entry exists for the given id.
      */
     abstract protected function doFetch($id);
 

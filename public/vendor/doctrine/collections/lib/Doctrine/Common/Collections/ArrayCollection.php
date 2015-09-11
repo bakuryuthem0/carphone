@@ -26,6 +26,11 @@ use Doctrine\Common\Collections\Expr\ClosureExpressionVisitor;
 /**
  * An ArrayCollection is a Collection implementation that wraps a regular PHP array.
  *
+ * Warning: Using (un-)serialize() on a collection is not a supported use-case
+ * and may break when we change the internals in the future. If you need to
+ * serialize a collection use {@link toArray()} and reconstruct the collection
+ * manually.
+ *
  * @since  2.0
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>
@@ -368,11 +373,12 @@ class ArrayCollection implements Collection, Selectable
         }
 
         if ($orderings = $criteria->getOrderings()) {
+            $next = null;
             foreach (array_reverse($orderings) as $field => $ordering) {
-                $next = ClosureExpressionVisitor::sortByField($field, $ordering == Criteria::DESC ? -1 : 1);
+                $next = ClosureExpressionVisitor::sortByField($field, $ordering == Criteria::DESC ? -1 : 1, $next);
             }
 
-            usort($filtered, $next);
+            uasort($filtered, $next);
         }
 
         $offset = $criteria->getFirstResult();

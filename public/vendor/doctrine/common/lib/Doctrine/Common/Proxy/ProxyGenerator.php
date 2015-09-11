@@ -37,7 +37,7 @@ class ProxyGenerator
      * Used to match very simple id methods that don't need
      * to be decorated since the identifier is known.
      */
-    const PATTERN_MATCH_ID_METHOD = '((public\s)?(function\s{1,}%s\s?\(\)\s{1,})\s{0,}{\s{0,}return\s{0,}\$this->%s;\s{0,}})i';
+    const PATTERN_MATCH_ID_METHOD = '((public\s+)?(function\s+%s\s*\(\)\s*)\s*{\s*return\s*\$this->%s;\s*})i';
 
     /**
      * The namespace that contains all proxy classes.
@@ -302,6 +302,7 @@ class <proxyShortClassName> extends \<className> implements \<baseProxyInterface
         $tmpFileName = $fileName . '.' . uniqid('', true);
 
         file_put_contents($tmpFileName, $proxyCode);
+        chmod($tmpFileName, 0664);
         rename($tmpFileName, $fileName);
     }
 
@@ -789,11 +790,12 @@ EOT;
                 $methods .= '        }' . "\n\n";
             }
 
-            $callParamsString = implode(', ', $this->getParameterNames($method->getParameters()));
+            $invokeParamsString = implode(', ', $this->getParameterNamesForInvoke($method->getParameters()));
+            $callParamsString = implode(', ', $this->getParameterNamesForParentCall($method->getParameters()));
 
             $methods .= "\n        \$this->__initializer__ "
                 . "&& \$this->__initializer__->__invoke(\$this, " . var_export($name, true)
-                . ", array(" . $callParamsString . "));"
+                . ", array(" . $invokeParamsString . "));"
                 . "\n\n        return parent::" . $name . '(' . $callParamsString . ');'
                 . "\n" . '    }' . "\n";
         }
@@ -906,6 +908,12 @@ EOT;
                 $parameterDefinition .= '&';
             }
 
+            if (method_exists($param, 'isVariadic')) {
+                if ($param->isVariadic()) {
+                    $parameterDefinition .= '...';
+                }
+            }
+
             $parameters[]     = '$' . $param->getName();
             $parameterDefinition .= '$' . $param->getName();
 
@@ -961,11 +969,36 @@ EOT;
      *
      * @return string[]
      */
-    private function getParameterNames(array $parameters)
+    private function getParameterNamesForInvoke(array $parameters)
     {
         return array_map(
             function (\ReflectionParameter $parameter) {
                 return '$' . $parameter->getName();
+            },
+            $parameters
+        );
+    }
+
+    /**
+     * @param \ReflectionParameter[] $parameters
+     *
+     * @return string[]
+     */
+    private function getParameterNamesForParentCall(array $parameters)
+    {
+        return array_map(
+            function (\ReflectionParameter $parameter) {
+                $name = '';
+
+                if (method_exists($parameter, 'isVariadic')) {
+                    if ($parameter->isVariadic()) {
+                        $name .= '...';
+                    }
+                }
+
+                $name .= '$' . $parameter->getName();
+
+                return $name;
             },
             $parameters
         );
