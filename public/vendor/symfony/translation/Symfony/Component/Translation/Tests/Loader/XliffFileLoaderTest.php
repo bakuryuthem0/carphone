@@ -25,6 +25,7 @@ class XliffFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('en', $catalogue->getLocale());
         $this->assertEquals(array(new FileResource($resource)), $catalogue->getResources());
         $this->assertSame(array(), libxml_get_errors());
+        $this->assertContainsOnly('string', $catalogue->all('domain1'));
     }
 
     public function testLoadWithInternalErrorsEnabled()
@@ -55,8 +56,7 @@ class XliffFileLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new XliffFileLoader();
         $catalogue = $loader->load(__DIR__.'/../fixtures/resources.xlf', 'en', 'domain1');
 
-        $this->assertEquals(array('foo' => 'bar', 'key' => '', 'test' => 'with'), $catalogue->all('domain1'));
-        $this->assertFalse($catalogue->has('extra', 'domain1'));
+        $this->assertEquals(array('foo' => 'bar', 'extra' => 'extra', 'key' => '', 'test' => 'with'), $catalogue->all('domain1'));
     }
 
     public function testEncoding()
