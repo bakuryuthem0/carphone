@@ -1,0 +1,29 @@
+.contCentrado
+{
+	float: none;
+	display: block;
+	margin: 0 auto;
+}
+.contDeColor
+{
+	border-radius: 8px;
+	border: 1px solid black;
+	padding: 2em 4em 4em;
+}
+.login-form .login-input.form-control,.search_box .input
+{
+	background: #F0F0E9;
+	border: 1px solid #ccc;
+}
+.responseAjax
+{
+	display: none;
+}
+a
+{
+	color: #333;
+}
+#contenedor
+{
+	margin: 50px 0;
+}
