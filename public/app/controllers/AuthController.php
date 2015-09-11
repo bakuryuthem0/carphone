@@ -56,5 +56,10 @@ class AuthController extends BaseController {
 			));
 		}
 	}
-
+	public function getRegister()
+	{
+		$title = "Registro | Nombre";
+		return View::make('home.register')
+		->with('title',$title);
+	}
 }
