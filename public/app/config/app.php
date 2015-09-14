@@ -113,7 +113,8 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'Intervention\Image\ImageServiceProvider'
+		'Intervention\Image\ImageServiceProvider',
+		'Gloudemans\Shoppingcart\ShoppingcartServiceProvider',
 	),
 
 	/*
@@ -178,7 +179,8 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'Intervention' 	  => 'Intervention\Image\Facades\Image'
+		'Intervention' 	  => 'Intervention\Image\Facades\Image',
+		'Cart'            => 'Gloudemans\Shoppingcart\Facades\Cart',
 	),
 
 );

@@ -58,7 +58,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a href="{{ URL::to('marca/ver-marcas') }}">
+                                <a href="{{ URL::to('marcas/ver-marcas') }}">
                                   Modificar marca
                                 </a>
                               </li>
