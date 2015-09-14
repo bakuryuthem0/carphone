@@ -69,20 +69,13 @@ class AdminController extends BaseController {
 	public function getNewItem()
 	{
 		$title = "Nuevo articulo | NombreDeLaTienda";
-		$cat = Cat::where('deleted','=',0)
+		$phon = Phones::where('deleted','=',0)
 		->get();
 		return View::make('admin.newItem')
 		->with('title',$title)
-		->with('cat',$cat);
+		->with('phon',$phon);
 	}
-	public function postCatSubCat()
-	{
-		if (Request::ajax()) {
-			$id = Input::get('id');
-			$subcat = SubCat::where('cat_id','=',$id)->where('deleted','=',0)->get();
-			return $subcat;
-		}
-	}
+
 	public function postNewItem()
 	{
 		$input = Input::all();
@@ -338,60 +331,7 @@ class AdminController extends BaseController {
 			return Redirect::back();
 		}
 	}
-	public function getShowTallas()
-	{
-		$title = "Ver tallas";
-		$tallas = Tallas::where('deleted','=',0)->get();
-		return View::make('admin.showTallas')
-		->with('talla',$tallas)
-		->with('title',$title);
-	}
-	public function postElimTalla()
-	{
-		if (Request::ajax()) {
-			$id = Input::get('id');
-			$tallas = Tallas::find($id);
-			$tallas->deleted = 1;
-			$tallas->save();
-			return Response::json(array('type' => 'success','msg' => 'Categoría eliminada correctamente'));
-		}
-	}
-	public function getMdfTalla($id)
-	{
-		$talla = Tallas::find($id);
-		$title = "Modificar talla: ".$talla->talla_nomb;
-		return View::make('admin.mdfTalla')
-		->with('title',$title)
-		->with('talla',$talla);
-	}
-	public function postMdfTalla($id)
-	{
-		$inp = Input::all();
-		$rules = array(
-			'name_talla' => 'required',
-			'desc_talla' => 'required'
-		);
-		$msg = array(
-			'required' => 'El campo es obligatorio'
-		);
-		$validator = Validator::make($inp, $rules, $msg);
-		if ($validator->fails()) {
-			
-			return Redirect::back()->withErrors($validator)->withInput();
-		}
-		$talla = Tallas::find($id);
-
-		$talla->talla_nomb = $inp['name_talla'];
-		$talla->talla_desc = $inp['desc_talla'];
-		if ($talla->save()) {
-			Session::flash('success','Talla modificada satisfactoriamente');
-			return Redirect::to('administrador/inicio');
-		}else
-		{
-			Session::flash('danger', 'Error al modificar la talla');
-			return Redirect::back();
-		}
-	}
+	
 	public function getNewMarca()
 	{
 		$title ="Nueva Marca";
@@ -478,30 +418,28 @@ class AdminController extends BaseController {
 	{
 		$input = Input::all();
 		$rules = array(
-			'name_color' => 'required',
-			'desc_color' => 'required'
+			'name_color' => 'required'
 		);
 		$msg = array('required' => 'El campo :attribute es obligatorio');
-		$attr = array('name_color' => 'nombre','desc_color' =>'título');
+		$attr = array('name_color' => 'nombre');
 		$validator = Validator::make($input, $rules, $msg, $attr);
 		if ($validator->fails()) {
-			return Redirect::to('color/nuevo')->withErrors($validator)->withInput();
+			return Redirect::back()->withErrors($validator)->withInput();
 		}
 		$color = new Colores;
-		$color->color_nomb = $input['name_color'];
-		$color->color_desc = $input['desc_color'];
+		$color->nombre = $input['name_color'];
 		if ($color->save()) {
 			Session::flash('success', 'Color creado satisfactoriamente.');
-			return Redirect::to('administrador/inicio');
+			return Redirect::to('color/ver-colores');
 		}else
 		{
 			Session::flash('error', 'Error al guardar el nuevo color.');
-			return Redirect::to('color/nuevo');
+			return Redirect::back()->withInput();
 		}
 	}
 	public function getModifyColor()
 	{
-		$title = "Ver categorías";
+		$title = "Ver Colores";
 		$color = Colores::where('deleted','=',0)->get();
 		return View::make('admin.showColor')
 		->with('title',$title)
@@ -520,24 +458,22 @@ class AdminController extends BaseController {
 		$input = Input::all();
 		$rules = array(
 			'name_color' => 'required',
-			'desc_color' => 'required'
 		);
 		$msg = array('required' => 'El campo :attribute es obligatorio');
-		$attr = array('name_color' => 'nombre','desc_color' =>'título');
+		$attr = array('name_color' => 'nombre');
 		$validator = Validator::make($input, $rules, $msg, $attr);
 		if ($validator->fails()) {
-			return Redirect::to('administrador/ver-color/'.$id)->withErrors($validator)->withInput();
+			return Redirect::back()->withErrors($validator)->withInput();
 		}
 		$color = Colores::find($id);
-		$color->color_nomb = $input['name_color'];
-		$color->color_desc = $input['desc_color'];
+		$color->nombre = $input['name_color'];
 		if ($color->save()) {
 			Session::flash('success', 'Color modificado satisfactoriamente.');
-			return Redirect::to('administrador/inicio');
+			return Redirect::to('color/ver-colores');
 		}else
 		{
 			Session::flash('error', 'Error al modificar el color.');
-			return Redirect::to('administrador/ver-color/'.$id);
+			return Redirect::back();
 		}
 	}
 	public function postElimColor()
@@ -547,7 +483,7 @@ class AdminController extends BaseController {
 			$color = Colores::find($id);
 			$color->deleted = 1;
 			$color->save();
-			return Response::json(array('type' => 'success','msg' => 'Categoría eliminada correctamente'));
+			return Response::json(array('type' => 'success','msg' => 'Color eliminada correctamente'));
 		}
 	}
 	public function getNewSubCat()

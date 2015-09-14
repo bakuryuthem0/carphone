@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
 	<div class="container">
-		<div class="col-xs-12 contCentrado contdeColor">
+		<div class="col-xs-12 contCentrado contDeColor">
 			<form method="POST" action="{{ URL::to('administrador/nuevo-articulo/enviar') }}">
 			<legend>Nuevo articulo</legend>
 			<p class="textoPromedio">(*) Campo obligatorio</p>
@@ -49,8 +49,8 @@
 				<?php $arr = array(
 							'' => 'Seleccione la Categoría');
 							 ?>
-					@foreach ($cat as $c)
-						<?php $arr = $arr+array($c->id => $c->cat_desc);  ?>
+					@foreach ($phon as $c)
+						<?php $arr = $arr+array($c->id => $c->nombre);  ?>
 					@endforeach
 					
 					{{ Form::select('cat',$arr,Input::old('cat'),array('class' => 'form-control cat','requied' => 'required')

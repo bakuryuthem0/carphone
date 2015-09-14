@@ -5,15 +5,18 @@ function elimSomethig(id,url) {
 		dataType: 'json',
 		data: {id: id},
 		beforeSend:function() {
-			$('.envElim').after('<img src="http://localhost/carphone/public/images/loader.png" class="miniLoader">');
+			$('.envElim').after('<img src="http://localhost/carphone/public/images/loader.gif" class="miniLoader">');
 			$('.envElim').addClass('disabled');
 		},
 		success:function(response)
 		{
 			$('.miniLoader').remove();
 			$('.envElim').removeClass('disabled');
-			$('#elimMarcModal').modal('hide');
-			$('.responseDanger').addClass('alert-'+response.type).html(response.html).show('fast');
+			$('.responseDanger').addClass('alert-'+response.type).html(response.msg).show('fast');
+			if (response.type == 'success') {
+				$('.to-elim').parent('td').parent('tr').remove();
+			};
+			$('.modal').modal('hide');
 			setTimeout(function() {
 				$('.responseDanger').hide('fast').removeClass('alert-'+response.type)
 			},5000);
@@ -22,7 +25,7 @@ function elimSomethig(id,url) {
 	
 }
 jQuery(document).ready(function($) {
-	$('.elimMarcBtn').on('click',function(event) {
+	$('.elimBtn').on('click',function(event) {
 		$(this).addClass('to-elim');
 		$('.envElim').val($(this).val())
 		$('.envElim').attr('data-url',$(this).data('url'));
@@ -30,7 +33,7 @@ jQuery(document).ready(function($) {
 	$('.envElim').on('click',function() {
 		elimSomethig($(this).val(),$(this).data('url'));
 	})
-	$('#elimMarcModal').on('hide.bs.modal', function(event) {
+	$('.modal').on('hide.bs.modal', function(event) {
 		$('.to-elim').removeClass('to-elim');
 	});
 });

@@ -43,8 +43,8 @@
                   <ul class="nav navbar-nav">
                     <li class="dropdown myMenu">
                       <a href="#" class="dropdown-toggle textoPromedio" data-toggle="dropdown" role="button" aria-expanded="false">
-                        <i class="fa fa-user"></i>
-                          {{ Auth::user()->username }}
+                        <i class="fa fa-mobile"></i>
+                          Tienda Telefonos
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu multi-level" role="menu">
                           <li class="dropdown-submenu">
@@ -59,17 +59,8 @@
                               </li>
                               <li>
                                 <a href="{{ URL::to('marcas/ver-marcas') }}">
+                                  <i class="fa fa-cogs"></i>
                                   Modificar marca
-                                </a>
-                              </li>
-                              <li>
-                                <a href="{{ URL::to('categoria/nueva-sub-categoria') }}">
-                                  Nueva Sub-categoría
-                                </a>
-                              </li>
-                              <li>
-                                <a href="{{ URL::to('sub-categoria/ver-sub-categorias') }}">
-                                  Modificar Sub-categoría
                                 </a>
                               </li>
                             </ul>
@@ -85,30 +76,13 @@
                                 </a>
                               </li>
                               <li>
-                                <a href="{{ URL::to('colores/ver-colores') }}">
-                                  <i class="fa fa-money"></i>
+                                <a href="{{ URL::to('color/ver-colores') }}">
+                                  <i class="fa fa-cogs"></i>
                                   Modificar
                                 </a>
                               </li>
                             </ul>
                           </li>
-                          <li class="dropdown-submenu">
-                            <a href="#" >
-                              Tallas
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                              <li>
-                                <a href="{{ URL::to('talla/nueva') }}">
-                                  <i class="fa fa-plus"></i> Nueva
-                                </a>
-                              </li>
-                              <li>
-                                <a href="{{ URL::to('talla/ver-tallas') }}">
-                                  <i class="fa fa-money"></i>
-                                  Modificar
-                                </a>
-                              </li>
-                            </ul>
                           </li>
                           <li class="dropdown-submenu">
                             <a href="#" >
@@ -116,8 +90,8 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                               <li>
-                                <a href="{{ URL::to('administrador/nuevo-articulo') }}">
-                                  Nuevo articulo
+                                <a href="{{ URL::to('articulo/nuevo') }}">
+                                  <i class="fa fa-plus"></i> Nuevo
                                 </a>
                               </li>
                               <li>

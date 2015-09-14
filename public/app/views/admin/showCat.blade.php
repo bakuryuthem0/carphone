@@ -24,7 +24,7 @@
 							<td class="textoNegro">{{ $c->id }}</td>
 							<td class="textoNegro">{{ ucfirst(strtolower($c->nombre)) }}</td>
 							<td><a class="btn btn-xs btn-warning" href="{{ URL::to('editar-marca/'.$c->id) }}">Modificar</a></td>
-							<td><button class="btn btn-xs btn-danger elimMarcBtn" data-url="{{ URL::to('marca/eliminar') }}" value="{{ $c->id }}" data-toggle="modal" data-target="#elimMarcModal">Eliminar</button></td>
+							<td><button class="btn btn-xs btn-danger elimBtn" data-url="{{ URL::to('marca/eliminar') }}" value="{{ $c->id }}" data-toggle="modal" data-target="#elimMarcModal">Eliminar</button></td>
 						</tr>
 						@endforeach
 					</tbody>
