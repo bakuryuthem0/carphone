@@ -6,12 +6,14 @@
 	<div class="container">
 		<div class="col-xs-12">
 			<div class="table-responsive">
+				<div class="alert responseDanger textoPromedio">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
 				<table class="table table-striped table-hover textoPromedio">
 					<thead>
 						<tr class="textoNegro">
 							<th>Código</th>
 							<th>Nombre</th>
-							<th>Título</th>
 							<th>Modificar</th>
 							<th>Eliminar</th>
 						</tr>
@@ -20,10 +22,9 @@
 						@foreach($cat as $c)
 						<tr>
 							<td class="textoNegro">{{ $c->id }}</td>
-							<td class="textoNegro">{{ ucfirst(strtolower($c->cat_nomb)) }}</td>
-							<td class="textoNegro">{{ ucfirst(strtolower($c->cat_desc)) }}</td>
-							<td><a class="btn btn-xs btn-warning" href="{{ URL::to('administrador/ver-categoria/'.$c->id) }}">Modificar</a></td>
-							<td><button class="btn btn-xs btn-danger elimBtn" value="{{ $c->id }}" data-toggle="modal" data-target="#elimModal">Eliminar</button></td>
+							<td class="textoNegro">{{ ucfirst(strtolower($c->nombre)) }}</td>
+							<td><a class="btn btn-xs btn-warning" href="{{ URL::to('editar-marca/'.$c->id) }}">Modificar</a></td>
+							<td><button class="btn btn-xs btn-danger elimMarcBtn" data-url="{{ URL::to('marca/eliminar') }}" value="{{ $c->id }}" data-toggle="modal" data-target="#elimMarcModal">Eliminar</button></td>
 						</tr>
 						@endforeach
 					</tbody>
@@ -32,7 +33,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="elimModal" tabindex="-1" role="dialog" aria-labelledby="modalForggo" aria-hidden="true">
+<div class="modal fade" id="elimMarcModal" tabindex="-1" role="dialog" aria-labelledby="modalForggo" aria-hidden="true">
 	<div class="forgotPass modal-dialog imgLiderUp">
 		<div class="modal-content">
 			<div class="modal-header textoNegro">
@@ -43,12 +44,8 @@
 					<p class="textoPromedio">Esta acción es irreversible, si desea continuar precione eliminar</p>
 											
 				</div>
-				<div class="modal-footer " style="text-align:center;">
-					<div class="alert responseDanger textoPromedio">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-					</div>
-					
-					<button class="btn btn-danger envElim" name="eliminar" value="" style="margin-top:2em;">Eliminar</button>	
+				<div class="modal-footer " style="text-align:center;">					
+					<button class="btn btn-danger envElim" name="eliminar" value="" data-url="" style="margin-top:2em;">Eliminar</button>	
 					
 				</div>
 		</div>

@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			
-			<div class="contCentrado col-xs-6 contdeColor" style="margin-top:2em;">
+			<div class="contCentrado col-xs-6 contDeColor">
 				<form action="{{ URL::to('administrador/iniciar-sesion/autenticar') }}" method="POST">
 					@if (Session::has('error'))
 					<div class="col-xs-12">
