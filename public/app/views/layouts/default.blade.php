@@ -61,27 +61,6 @@
 							<a href="index.html"><img src="images/home/logo.png" alt="" /></a>
 						</div>
 						<div class="btn-group pull-right">
-							{{-- <div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-									USA
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Canada</a></li>
-									<li><a href="#">UK</a></li>
-								</ul>
-							</div>
-							
-							<div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-									DOLLAR
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Canadian Dollar</a></li>
-									<li><a href="#">Pound</a></li>
-								</ul>
-							</div> --}}
 						</div>
 					</div>
 					<div class="col-md-8">
@@ -89,11 +68,12 @@
 							<ul class="nav navbar-nav">
 								@if(Auth::check())
 									<li><a href="#"><i class="fa fa-star"></i> Lista de Deseos</a></li>
-									<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Pagar</a></li>
 									<li><a href="cart. html"><i class="fa fa-shopping-cart"></i> Carrito</a></li>
+									<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Pagar</a></li>
+									<li><a href="{{ URL::to('cerrar-sesion') }}"><i class="fa fa-sign-out"></i> Cerrar Sesión</a></li>
 								@else
 									<li><a href="{{ URL::to('registrarse') }}"><i class="fa fa-user"></i> Registrarse</a></li>
-									<li><a href="#!" data-toggle="modal" data-target="#myModal"><i class="fa fa-lock"></i> Login</a></li>
+									<li><a href="#!" data-toggle="modal" data-target="#myModal"><i class="fa fa-sign-in"></i> Login</a></li>
 								@endif
 
 							</ul>
@@ -122,7 +102,7 @@
 									<a href="#">Tiendas<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="shop.html">Carrors</a></li>
-										<li><a href="product-details.html">Telefonos</a></li> 
+										<li><a href="{{ URL::to('telefonos') }}">Telefonos</a></li> 
 										@if(Auth::check())
 											<li><a href="checkout.html">Checkout</a></li> 
 											<li><a href="cart.html">Cart</a></li> 
@@ -131,12 +111,7 @@
 										@endif
                                     </ul>
                                 </li> 
-								{{-- <li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.html">Blog List</a></li>
-										<li><a href="blog-single.html">Blog Single</a></li>
-                                    </ul>
-                                </li>  --}} 
+								
 								<li><a href="contact-us.html">Contact</a></li>
 							</ul>
 						</div>
@@ -232,27 +207,27 @@
 			<div class="container">
 				<div class="row">
 					<p class="pull-left">Copyright © 2013 E-SHOPPER Inc. All rights reserved.</p>
-					<p class="pull-right">Designed by <span><a target="_blank" href="http://www.themeum.com">Themeum</a></span></p>
+					<p class="pull-right">Creado por <span><a target="_blank" href="http://tecnographic.com.ve">Tecnographic Venezuela</a></span></p>
 				</div>
 			</div>
 		</div>
 		
 	</footer><!--/Footer-->
-	
+@if(!Auth::check() && $title != "Iniciar Sesión | Nombre")
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content contDeColor">
-	      <div class="login-form"><!--login form-->
-			<legend><h2>Inicie Sesion en su cuenta</h2></legend>
-			@if(Session::has('success'))
+		<div class="modal-dialog" role="document">
+			<div class="modal-content contDeColor">
+				<div class="login-form"><!--login form-->
+				<legend><h2>Inicie Sesion en su cuenta</h2></legend>
+				@if(Session::has('success'))
 				<div class="alert alert-success">
 					<p>{{ Session::get('success') }}</p>
 				</div>
-			@endif
-			<div class="alert responseAjax">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			</div>
+				@endif
+				<div class="alert responseAjax">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				</div>
 				<fieldset>
 					<label for="">Usuario</label>
 					<input type="text" placeholder="Usuario" class="login-input form-control username">
@@ -262,7 +237,7 @@
 					<input type="password" placeholder="Contraseña" class="login-input form-control password">
 				</fieldset>
 				<span class="checkbox">
-					<input type="checkbox" class="checkbox checkbox-login"> 
+					<input type="checkbox" class="checkbox checkbox-login">
 					Recordar
 				</span>
 				<button type="submit" class="btn btn-default login">Login</button>
@@ -271,10 +246,11 @@
 				<a href="{{ URL::to('registrarse') }}">¿No Tienes cuenta? Registrate</a>
 				<br>
 				<a href="">¿Olvidaste tu contraseña?</a>
-		</div><!--/login form-->
+				</div><!--/login form-->
+			</div>
+		</div>
 	</div>
-	    </div>
-	  </div>
+@endif
 	</div>
   
 	{{ HTML::script('js/jquery.js') }}

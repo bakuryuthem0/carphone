@@ -85,3 +85,18 @@ Route::filter('check_no_auth',function(){
 		return Redirect::to('/');
 	}
 });
+Route::filter('check_auth',function(){
+	if(!Auth::check())
+	{
+		return Redirect::to('iniciar-sesion');
+	}
+});
+
+Route::filter('check_admin',function()
+{
+	if(Auth::user()->role != 1)
+	{
+		die();
+		return Redirect::to('/');
+	}
+});

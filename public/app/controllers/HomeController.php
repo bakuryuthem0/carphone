@@ -21,5 +21,10 @@ class HomeController extends BaseController {
 		return View::make('home.index')
 		->with('title',$title);
 	}
-
+	public function getPhones()
+	{
+		$title = "Telefonos | Nombre";
+		return View::make('phone.home.index')
+		->with('title',$title);
+	}
 }

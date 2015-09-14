@@ -46,7 +46,8 @@ class AuthController extends BaseController {
 		if(Auth::attempt($data, $inp['check']))
 		{
 			return Response::json(array(
-				'type' => 'success'
+				'type' => 'success',
+				'msg'  => 'Inicio de sesión satisfactorio, redirigiendo'
 			));
 		}else
 		{
@@ -82,7 +83,7 @@ class AuthController extends BaseController {
 		}
 		$user = new User;
 		$user->username = $inp['user'];
-		$user->password = $inp['pass'];
+		$user->password = Hash::make($inp['pass']);
 		$user->email 	= $inp['email'];
 		if ($user->save()) {
 			Session::flash('success', 'Cuenta creada satisfactoriamente');
@@ -93,5 +94,13 @@ class AuthController extends BaseController {
 			return Redirect::back();
 		}
 
+	}
+	public function getLogOut()
+	{
+		Auth::logout();
+		if (Auth::check()) {
+			return 'nope';
+		}
+		return Redirect::to('/');
 	}
 }

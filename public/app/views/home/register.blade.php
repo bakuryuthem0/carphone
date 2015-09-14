@@ -13,7 +13,7 @@
 						<form method="POST" action="{{ URL::to('registrarse/enviar') }}" class="form-register">
 							<fieldset>
 								<label for="">Nombre de usuario</label>
-								<input type="text" name="user" placeholder="Usuario" class="login-input form-control register-input username" value="{{ Input::old('user') }}">
+								<input type="text" name="user" placeholder="Usuario" class="login-input form-control register-input username" value="{{ Input::old('user') }}" required>
 								@if ($errors->has('user'))
 								 @foreach($errors->get('user') as $err)
 								 	<div class="alert alert-danger">
@@ -26,7 +26,7 @@
 							<br>
 							<fieldset>
 								<label for="">Contraseña</label>
-								<input type="password" name="pass" placeholder="Contraseña" class="login-input form-control register-input password" value="{{ Input::old('pass') }}">
+								<input type="password" name="pass" placeholder="Contraseña" class="login-input form-control register-input password" value="{{ Input::old('pass') }}" required>
 								@if ($errors->has('pass'))
 								 @foreach($errors->get('pass') as $err)
 								 	<div class="alert alert-danger">
@@ -38,7 +38,7 @@
 							</fieldset>
 							<fieldset>
 								<label for="">Repita la Contraseña</label>
-								<input type="password" name="pass_confirmation" placeholder="Contraseña" class="login-input form-control register-input password2" value="{{ Input::old('pass_confirmation') }}">
+								<input type="password" name="pass_confirmation" placeholder="Contraseña" class="login-input form-control register-input password2" value="{{ Input::old('pass_confirmation') }}" required>
 								@if ($errors->has('pass2'))
 								 @foreach($errors->get('pass2') as $err)
 								 	<div class="alert alert-danger">
@@ -50,7 +50,7 @@
 							</fieldset>
 							<fieldset>
 								<label for="">Email</label>
-								<input type="email" name="email" placeholder="Usuario" class="login-input form-control register-input email" value="{{ Input::old('email') }}">
+								<input type="email" name="email" placeholder="Usuario" class="login-input form-control register-input email" value="{{ Input::old('email') }}" required>
 								@if ($errors->has('email'))
 								 @foreach($errors->get('email') as $err)
 								 	<div class="alert alert-danger">

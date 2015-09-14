@@ -27,3 +27,8 @@ a
 {
 	margin: 50px 0;
 }
+.miniLoader
+{
+	display: inline-block;
+    margin-left: 10px;
+}
