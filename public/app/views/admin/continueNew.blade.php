@@ -22,37 +22,6 @@
 					 @endforeach
 				@endif
 			</div>
-			<div class="col-xs-6 inputForm">
-				<label class="textoPromedio">Seleccione la talla</label>
-				@if(!empty($tallas) && !is_null($tallas) && count($tallas)>0)
-				<select name="talla" class="form-control" requied>
-					<option value="">Seleccione una talla</option>
-					@foreach ($tallas as $talla)
-						<option value="{{ $talla->id }}">{{ strtoupper($talla->talla_nomb).' - '.ucfirst($talla->talla_desc) }}</option>
-					@endforeach
-					<option value="all">Todas</option>
-				</select>
-				@endif
-				
-				
-			</div>
-			<div class="col-xs-6 inputForm">
-				<label class="textoPromedio">Seleccione El color</label>
-				
-				@if(!empty($colores) && !is_null($colores) && count($colores)>0)
-				<select name="color" class="form-control" requied>
-					<option value="">Seleccione un color</option>
-					@foreach ($colores as $color)
-						<option value="{{$color->id}}">{{ucfirst($color->color_desc)}}</option>
-					@endforeach
-					<option value="all">Todas</option>
-				</select>
-				@endif
-				
-				<input type="hidden" id="art_id" name="art" value="{{ $id }}">
-                <input type="hidden" id="misc_id" name="misc" value="{{ $misc_id }}">
-			</div>
-			
 			</form>
 			<div class="col-xs-12 inputForm">
                 <legend style="text-align:center;">Agregar las imágenes.</legend>
@@ -64,7 +33,6 @@
                             Arrastre o presione aquí para subir su imagen.
                         </div>
                         <input type="hidden" name="art_id" class="art_id" value="{{ $id }}">
-                        <input type="hidden" name="misc_id" class="misc_id" value="{{ $misc_id }}">
                     </form>
                     
                 </div>
