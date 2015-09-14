@@ -65,24 +65,6 @@
                               </li>
                             </ul>
                           </li>
-                          <li class="dropdown-submenu">
-                            <a href="#" >
-                              Colores
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                              <li>
-                                <a href="{{ URL::to('color/nuevo') }}">
-                                  <i class="fa fa-plus"></i> Nuevo
-                                </a>
-                              </li>
-                              <li>
-                                <a href="{{ URL::to('color/ver-colores') }}">
-                                  <i class="fa fa-cogs"></i>
-                                  Modificar
-                                </a>
-                              </li>
-                            </ul>
-                          </li>
                           </li>
                           <li class="dropdown-submenu">
                             <a href="#" >
@@ -189,6 +171,8 @@
         <script>window.jQuery || document.write('<script src="js/jquery.js"><\/script>')</script>
         {{ HTML::script('js/jquery.js') }}
         {{ HTML::script('js/bootstrap.min.js') }}
+        {{ HTML::script('js/ckeditor/ckeditor.js') }}
+        {{ HTML::script('js/ckeditor/jquery.ckeditor.js') }}
         {{ HTML::script('js/custom-admin.js') }}
         {{ HTML::script('//code.jquery.com/ui/1.11.2/jquery-ui.js') }}
   

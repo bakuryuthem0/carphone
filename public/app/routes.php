@@ -36,7 +36,8 @@ Route::group(array('before' => 'check_auth'),function()
 		Route::post('color/eliminar','AdminController@postElimColor');
 		//articulos
 		Route::get('articulo/nuevo','AdminController@getNewItem');
-		Route::post('articulo/nuevo/enviar','AdminController@postNewColor');
+		Route::post('articulo/nuevo/enviar','AdminController@postNewItem');
+		Route::get('articulo/nuevo-articulo/continuar/{id}','AdminController@getContinueNew');
 		Route::get('articulo/ver-articulos','AdminController@getModifyColor');
 		Route::get('articulo/editar-articulos/{id}','AdminController@getModifyColorById');
 		Route::post('articulo/modificar-articulos/{id}/enviar','AdminController@postModifyColorById');

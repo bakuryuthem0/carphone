@@ -1,7 +1,59 @@
 <?php
 
 class AdminController extends BaseController {
+	public function saveImage($id,$file)
+	{
+		$images = new Images;
+		if (file_exists('images/items/'.$id.'/'.$file->getClientOriginalName())) {
 
+			//guardamos la imagen en public/imgs con el nombre original
+            $i = 0;//indice para el while
+            //separamos el nombre de la img y la extensión
+            $info = explode(".",$file->getClientOriginalName());
+            //asignamos de nuevo el nombre de la imagen completo
+            $miImg = $file->getClientOriginalName();
+            //mientras el archivo exista iteramos y aumentamos i
+            while(file_exists('images/items/'.$id.'/'. $miImg)){
+                $i++;
+                $miImg = $info[0]."(".$i.")".".".$info[1];              
+            }
+            //guardamos la imagen con otro nombre ej foto(1).jpg || foto(2).jpg etc
+            $file->move("images/items/".$id,$miImg);
+            $blank = Intervention::make('images/blank.jpg');
+            $img = Intervention::make('images/items/'.$id.'/'.$miImg);
+           if ($img->width() > $img->height()) {
+            	$img->widen(900);
+            }else
+            {
+            	$img->heighten(1200);
+            }
+            
+	        $blank->insert($img,'center')
+	           ->interlace()
+	           ->save('images/items/'.$id.'/'.$miImg);
+            if($miImg != $file->getClientOriginalName()){
+            	$images->image = $id.'/'.$miImg;
+            }
+		}else
+		{
+			$file->move("images/items/".$id,$file->getClientOriginalName());
+			$blank = Intervention::make('images/blank.jpg');
+			$img = Intervention::make('images/items/'.$id.'/'.$file->getClientOriginalName());
+            if ($img->width() > $img->height()) {
+            	$img->widen(900);
+            }else
+            {
+            	$img->heighten(1200);
+            }
+
+            $blank->insert($img,'center')
+           ->interlace()
+           ->save('images/items/'.$id.'/'.$file->getClientOriginalName());
+           $images->image = $id.'/'.$file->getClientOriginalName();
+		}
+		$images->item_id = $id;
+		$images->save();
+	}
 	/*
 	|--------------------------------------------------------------------------
 	| Default Home Controller
@@ -80,63 +132,62 @@ class AdminController extends BaseController {
 	{
 		$input = Input::all();
 		$rules = array(
-			'cat'    	=> 'required',
-            'item_precio_dol'=> 'required',
-			'item_cod'  => 'required|unique:item',
-			'item_nomb' => 'required|min:4',
-			'item_desc' => 'required|min:4',
+			'cat'    		 => 'required',
+			'item_cod'  	 => 'required|unique:items',
+			'item_nomb' 	 => 'required|min:4',
+			'item_desc' 	 => 'required|min:4',
+            'item_precio'	 => 'required',
+            'color'  		 => 'required',
+            'item_stock'	 => 'required',
+			'img1'			 => 'required|image',
 		);
 		$msg = array(
 			'required' => 'El campo :attribute es obligatorio',
 			'min'	   => 'El campo :attribute es muy corto(a)',
-			'unique'   => 'El campo :attribute debe ser unico'
+			'unique'   => 'El campo :attribute debe ser unico',
+			'image'    => 'El campo :attribute debe ser una imagen',
 		);
 		$attr = array(
 			'cat'        => 'categoría',
 			'item_precio'=> 'precio',
-                        'item_precio_dol'=> 'precio en dolares',
 			'item_cod'   => 'artículo',
 			'item_nomb'  => 'artículo',
 			'item_desc'  => 'artículo',
+			'img1' 		 => 'Imagen principal',
+			'item_stock' => 'Stock',
 		);
 		$validation = Validator::make($input, $rules, $msg, $attr);
 		if ($validation->fails()) {
-			return Redirect::to('administrador/nuevo-articulo')->withErrors($validation)->withInput();
+			return Redirect::back()->withErrors($validation)->withInput();
 		}else
 		{
 			$item = new Items;
-			$item->item_cat   = $input['cat']; 
-			if (!empty($input['subcat'])) {
-				$item->item_subcat= $input['subcat'];
-
-			}
+			$item->item_marc  = $input['cat']; 
 			$item->item_cod   = $input['item_cod'];
 			$item->item_nomb  = $input['item_nomb'];
 			$item->item_desc  = $input['item_desc'];
-            $item->item_precio= $input['item_precio_dol'];
+            $item->item_prec  = $input['item_precio'];
 			$item->save();
+
 			$id = $item->id;
-			$misc = new Misc;
-			$misc->item_id = $id;
-			$misc->save();
-			$misc_id = $misc->id;
-			if (!file_exists('images/items/'.$id)) {
-				mkdir('images/items/'.$id);
-			}
-			return Redirect::to('administrador/nuevo-articulo/continuar/'.$id.'/'.$misc_id);	
+			$color = new Colores;
+			$color->item_id 	= $id;
+			$color->nombre  	= $input['color'];
+			$color->item_stock  = $input['item_stock'];
+			$color->save();
+
+			$img = Input::file('img1');
+			$this->saveImage($id,$img);
+
+			return Redirect::to('articulo/nuevo-articulo/continuar/'.$id);	
 		}
 	}
-	public function getContinueNew($id,$misc_id)
+	public function getContinueNew($id)
 	{
-		$title = "Colores y tallas";
-		$tallas = Tallas::where('deleted','=',0)->get();
-		$colors = Colores::where('deleted','=',0)->get();
+		$title = "Agregar imagenes";
 		return View::make('admin.continueNew')
 		->with('title',$title)
-		->with('id',$id)
-		->with('misc_id',$misc_id)
-		->with('tallas',$tallas)
-		->with('colores',$colors);
+		->with('id',$id);
 		
 	}
 	public function getImagesNew($id)
@@ -169,53 +220,7 @@ class AdminController extends BaseController {
 		$file 	 = Input::file('file');
 		$images  = new Images;
 		$images->misc_id =  $misc_id;
-		if (file_exists('images/items/'.$id.'/'.$file->getClientOriginalName())) {
-			//guardamos la imagen en public/imgs con el nombre original
-            $i = 0;//indice para el while
-            //separamos el nombre de la img y la extensión
-            $info = explode(".",$file->getClientOriginalName());
-            //asignamos de nuevo el nombre de la imagen completo
-            $miImg = $file->getClientOriginalName();
-            //mientras el archivo exista iteramos y aumentamos i
-            while(file_exists('images/items/'.$id.'/'. $miImg)){
-                $i++;
-                $miImg = $info[0]."(".$i.")".".".$info[1];              
-            }
-            //guardamos la imagen con otro nombre ej foto(1).jpg || foto(2).jpg etc
-            $file->move("images/items/".$id,$miImg);
-            $blank = Image::make('images/blank.jpg');
-
-            $img = Image::make('images/items/'.$id.'/'.$miImg);
-           if ($img->width() > $img->height()) {
-            	$img->widen(900);
-            }else
-            {
-            	$img->heighten(1200);
-            }
-            
-	        $blank->insert($img,'center')
-	           ->interlace()
-	           ->save('images/items/'.$id.'/'.$miImg);
-            if($miImg != $file->getClientOriginalName()){
-            	$images->image = $id.'/'.$miImg;
-            }
-		}else
-		{
-			$file->move("images/items/".$id,$file->getClientOriginalName());
-			$blank = Image::make('images/blank.jpg');
-			$img = Image::make('images/items/'.$id.'/'.$file->getClientOriginalName());
-            if ($img->width() > $img->height()) {
-            	$img->widen(900);
-            }else
-            {
-            	$img->heighten(1200);
-            }
-
-            $blank->insert($img,'center')
-           ->interlace()
-           ->save('images/items/'.$id.'/'.$file->getClientOriginalName());
-           $images->image = $id.'/'.$file->getClientOriginalName();
-		}
+		
 		$images->save();
         return Response::json(array('image' => $images->id));
 

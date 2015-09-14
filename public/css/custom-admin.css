@@ -10,7 +10,7 @@
 	border: 1px solid black;
 	padding: 2em 4em 4em;
 }
-.formulario
+.formulario,.inputForm
 {
 	margin-bottom: 1em;
 }
