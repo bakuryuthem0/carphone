@@ -1704,12 +1704,12 @@
         "target-dir": "Symfony/Component/Console",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/Console.git",
+            "url": "git@github.com:symfony/Console.git",
             "reference": "8ebd2d5664747efe5d0d45b630d7c96444325c0f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Console/zipball/8ebd2d5664747efe5d0d45b630d7c96444325c0f",
+            "url": "https://api.github.com/repos/symfony/Console/zipball/e8ccc45ab9aad790115de6943eef9c1ecfbebf99",
             "reference": "8ebd2d5664747efe5d0d45b630d7c96444325c0f",
             "shasum": ""
         },
@@ -1917,53 +1917,6 @@
         ]
     },
     {
-        "name": "gloudemans/shoppingcart",
-        "version": "1.2.1",
-        "version_normalized": "1.2.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Crinsane/LaravelShoppingcart.git",
-            "reference": "1f004b696ab7df255c19d0094b0c765fdb106e39"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Crinsane/LaravelShoppingcart/zipball/1f004b696ab7df255c19d0094b0c765fdb106e39",
-            "reference": "1f004b696ab7df255c19d0094b0c765fdb106e39",
-            "shasum": ""
-        },
-        "require": {
-            "illuminate/support": "~4",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "mockery/mockery": "~0.9",
-            "phpunit/phpunit": "~4.0"
-        },
-        "time": "2014-12-06 14:15:56",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Gloudemans\\Shoppingcart": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Rob Gloudemans",
-                "email": "Rob_Gloudemans@hotmail.com"
-            }
-        ],
-        "description": "Laravel 4 Shoppingcart",
-        "keywords": [
-            "laravel",
-            "shoppingcart"
-        ]
-    },
-    {
         "name": "psr/http-message",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2072,6 +2025,53 @@
             "message",
             "stream",
             "uri"
+        ]
+    },
+    {
+        "name": "gloudemans/shoppingcart",
+        "version": "1.2.1",
+        "version_normalized": "1.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Crinsane/LaravelShoppingcart.git",
+            "reference": "1f004b696ab7df255c19d0094b0c765fdb106e39"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Crinsane/LaravelShoppingcart/zipball/1f004b696ab7df255c19d0094b0c765fdb106e39",
+            "reference": "1f004b696ab7df255c19d0094b0c765fdb106e39",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/support": "~4",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "mockery/mockery": "~0.9",
+            "phpunit/phpunit": "~4.0"
+        },
+        "time": "2014-12-06 14:15:56",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Gloudemans\\Shoppingcart": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Rob Gloudemans",
+                "email": "Rob_Gloudemans@hotmail.com"
+            }
+        ],
+        "description": "Laravel 4 Shoppingcart",
+        "keywords": [
+            "laravel",
+            "shoppingcart"
         ]
     },
     {
