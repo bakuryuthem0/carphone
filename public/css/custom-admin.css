@@ -32,6 +32,15 @@
 {
     margin-top: 8%;
 }
+.imgItem
+{
+    max-width: 200px;
+}
+.table-centered,.table-centered tbody tr td
+{
+    text-align: center;
+    vertical-align: middle;
+}
 .dropdown-submenu {
     position: relative;
 }

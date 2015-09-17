@@ -231,127 +231,90 @@ class AdminController extends BaseController {
 			return Response::make($validation)->withErrors($validation);
 		}
 		$id 	 = Input::get('art_id');
-		$misc_id = Input::get('misc_id');
 		$file 	 = Input::file('file');
-		$images  = new Images;
-		$images->misc_id =  $misc_id;
-		
-		$images->save();
+		$this->saveImage($id,$file);
+		$images = Images::where('item_id','=',$id)->orderBy('id','DESC')->first();
         return Response::json(array('image' => $images->id));
-
-        if( $upload_success ) {
-        	return Response::json('success', 200);
-        } else {
-        	return Response::json('error', 400);
-        }
 	}
 	public function postDeleteImg()
 	{
-		$image 		= Input::get('image');
-		$file 		= Input::get('name');
-		$id     	= Input::get('id');
-		$misc_id    = Input::get('misc_id');
-		$misc 		= Misc::find($misc_id);
-		$img = Images::find($image);
+		$id 		= Input::get('image');
+		$img = Images::find($id);
 		$img->deleted = 1;
 		File::delete('images/items/'.$img->image);
 		$img->save();
 		
-		return Response::json(array('llego' => 'llego'));
+		return Response::json(array('type' => 'success','msg' => 'Imagen eliminada satisfactoriamente'));
 	}
-	public function postContinueNew()
+	public function postDeleteImgMdf()
 	{
-		$input = Input::all();
-		$rules = array(
-			'item_stock' 	=> 'required|min:1',
-			'talla' 		=> 'required',
-			'color' 		=> 'required'
-		);
-		$msg = array('required' => 'El campo :attribute es obligatorio');
-		$validator = Validator::make($input, $rules,$msg);
-		if ($validator->fails()) {
-			return Redirect::to('administrador/nuevo-articulo/continuar/'.$input['art'].'/'.$input['misc'])->withErrors($validator);
-		}
-		$misc = Misc::find($input['misc']);
-		$misc->item_talla = $input['talla'];
-		$misc->item_color = $input['color'];
-		$misc->item_stock = $input['item_stock'];
-		if ($misc->save()) {
-			$misc = new Misc;
-			$misc->item_id = $input['art'];
-			$misc->save();
-			return Redirect::to('administrador/nuevo-articulo/continuar/'.$input['art'].'/'.$misc->id);
-		}
-	}
-	public function postSaveNew(){
-		$input = Input::all();
-		$rules = array(
-			'item_stock' => 'required',
-			'talla' 	 => 'required',
-			'color' 	 => 'required'
-		);
-		$msg = array('required' => 'El campo :attribute es obligatorio');
-		$validator = Validator::make($input, $rules,$msg);
-		if ($validator->fails()) {
-			return Redirect::to('administrador/nuevo-articulo/continuar/'.$input['art'].'/'.$input['misc'])->withErrors($validator);
-		}
-		$misc = Misc::find($input['misc']);
-		$misc->item_talla = $input['talla'];
-		$misc->item_color = $input['color'];
-		$misc->item_stock = $input['item_stock'];
-		if ($misc->save()) {
-			Session::flash('success', 'Articulo creado correctamente.');
-			return Redirect::to('administrador/inicio');
-		}
+		$id 		= Input::get('id');
+		$img = Images::find($id);
+		$img->deleted = 1;
+		File::delete('images/items/'.$img->image);
+		$img->save();
+		
+		return Response::json(array('type' => 'success','msg' => 'Imagen eliminada satisfactoriamente'));
 	}
 	public function getShowArt()
 	{
 		$title = "Articulos";
 		$art = Items::get(array(
-			'item.item_cod',
-			'item.item_nomb',
-			'item.id',
-			'item.deleted'
+			'item_cod',
+			'item_nomb',
+			'id',
+			'deleted'
 		));
 		return View::make('admin.showArt')
 		->with('title',$title)
 		->with('art',$art);
 	}
-	public function getNewTalla()
+	public function getMdfItem($id)
 	{
-		$title = "Nueva Talla";
-		return View::make('admin.newTalla')
-		->with('title',$title);
+		$title 	  = 'Modificar articulo';
+		$item 	  = Items::find($id);
+		$marcas   = Phones::where('deleted','=',0)->get();
+		$colores  = Colores::where('item_id','=',$item->id)->where('deleted','=',0)->get();
+		$imagenes = Images::where('item_id','=',$item->id)->where('deleted','=',0)->get();
+		return View::make('admin.mdfItem')
+		->with('title',$title)
+		->with('item',$item)
+		->with('colores',$colores)
+		->with('images',$imagenes)
+		->with('marcas',$marcas);
 	}
-	public function postNewTalla()
+	public function postMdfItem($id)
 	{
 		$inp = Input::all();
 		$rules = array(
-			'name_talla' => 'required',
-			'desc_talla' => 'required'
+			'cat'    		 => 'required',
+			'item_cod'  	 => 'required',
+			'item_nomb' 	 => 'required|min:4',
+			'item_desc' 	 => 'required|min:4',
+            'item_precio'	 => 'required',
 		);
 		$msg = array(
-			'required' => 'El campo es obligatorio'
+			'required' => 'El campo no debe estar vacio',
+			'min' 	   => 'El campo es muy corto'
 		);
 		$validator = Validator::make($inp, $rules, $msg);
 		if ($validator->fails()) {
-			
-			return Redirect::back()->withErrors($validator)->withInput();
+			return Redirect::back()->withErrors($validator);
 		}
-		$talla = New Tallas;
-
-		$talla->talla_nomb = $inp['name_talla'];
-		$talla->talla_desc = $inp['desc_talla'];
-		if ($talla->save()) {
-			Session::flash('success','Talla creada satisfactoriamente');
-			return Redirect::to('administrador/inicio');
+		$item = Items::find($id);
+		$item->item_cod  	= $inp['item_cod'];
+		$item->item_nomb 	= $inp['item_nomb'];
+		$item->item_desc 	= $inp['item_desc'];
+		$item->item_prec	= $inp['item_precio'];
+		if ($item->save()) {
+			Session::flash('success', 'Articulo modificado satisfactoriamente.');
+			return Redirect::back();
 		}else
 		{
-			Session::flash('danger', 'Error al crear la talla');
+			Session::flash('dager', 'Error al modificar el articulo.');
 			return Redirect::back();
 		}
 	}
-	
 	public function getNewMarca()
 	{
 		$title ="Nueva Marca";
@@ -418,291 +381,7 @@ class AdminController extends BaseController {
 			return Redirect::back();
 		}
 	}
-	public function postElimCat()
-	{
-		if (Request::ajax()) {
-			$id = Input::get('id');
-			$phon = Phones::find($id);
-			$phon->deleted = 1;
-			$phon->save();
-			return Response::json(array('type' => 'success','msg' => 'Categoría eliminada correctamente'));
-		}
-	}
-	public function getNewColor()
-	{
-		$title = "Nuevo color";
-		return View::make('admin.newColor')
-		->with('title',$title);
-	}
-	public function postNewColor()
-	{
-		$input = Input::all();
-		$rules = array(
-			'name_color' => 'required'
-		);
-		$msg = array('required' => 'El campo :attribute es obligatorio');
-		$attr = array('name_color' => 'nombre');
-		$validator = Validator::make($input, $rules, $msg, $attr);
-		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator)->withInput();
-		}
-		$color = new Colores;
-		$color->nombre = $input['name_color'];
-		if ($color->save()) {
-			Session::flash('success', 'Color creado satisfactoriamente.');
-			return Redirect::to('color/ver-colores');
-		}else
-		{
-			Session::flash('error', 'Error al guardar el nuevo color.');
-			return Redirect::back()->withInput();
-		}
-	}
-	public function getModifyColor()
-	{
-		$title = "Ver Colores";
-		$color = Colores::where('deleted','=',0)->get();
-		return View::make('admin.showColor')
-		->with('title',$title)
-		->with('color',$color);
-	}
-	public function getModifyColorById($id)
-	{
-		$color = Colores::find($id);
-		$title ="Modificar color: ".$color->color_nomb;
-		return View::make('admin.mdfColor')
-		->with('title',$title)
-		->with('color',$color);
-	}
-	public function postModifyColorById($id)
-	{
-		$input = Input::all();
-		$rules = array(
-			'name_color' => 'required',
-		);
-		$msg = array('required' => 'El campo :attribute es obligatorio');
-		$attr = array('name_color' => 'nombre');
-		$validator = Validator::make($input, $rules, $msg, $attr);
-		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator)->withInput();
-		}
-		$color = Colores::find($id);
-		$color->nombre = $input['name_color'];
-		if ($color->save()) {
-			Session::flash('success', 'Color modificado satisfactoriamente.');
-			return Redirect::to('color/ver-colores');
-		}else
-		{
-			Session::flash('error', 'Error al modificar el color.');
-			return Redirect::back();
-		}
-	}
-	public function postElimColor()
-	{
-		if (Request::ajax()) {
-			$id = Input::get('id');
-			$color = Colores::find($id);
-			$color->deleted = 1;
-			$color->save();
-			return Response::json(array('type' => 'success','msg' => 'Color eliminada correctamente'));
-		}
-	}
-	public function getNewSubCat()
-	{
-		$title = "Nueva sub-categoria";
-		$cat = Cat::where('deleted','=',0)
-		->get();
-		return View::make('admin.newSubCat')
-		->with('title',$title)
-		->with('cat',$cat);
-	}
-	public function postNewSubCat()
-	{
-		$input = Input::all();
-		$rules = array(
-			'cat' 		  	=> 'required',
-			'name_subcat'  	=> 'required',
-			'desc_subcat' 	=> 'required',
-			'img'			=> 'required|image',	
-		);
-		$msg = array(
-			'required' => 'El campo es obligatorio',
-			'image'	   => 'El archivo debe ser una imagen'
-		);
-		$validator = Validator::make($input, $rules, $msg);
-		if ($validator->fails()) {
-			return Redirect::to('categoria/nueva-sub-categoria')->withErrors($validator)->withInput();
-		}
-		$subcat = new SubCat;
-		$subcat->cat_id   = $input['cat'];
-		$subcat->sub_nomb = $input['name_subcat'];
-		$subcat->sub_desc = $input['desc_subcat'];
-		$file = Input::file('img');
-		if (file_exists('images/categorias/'.$file->getClientOriginalName())) {
-			//guardamos la imagen en public/imgs con el nombre original
-            $i = 0;//indice para el while
-            //separamos el nombre de la img y la extensión
-            $info = explode(".",$file->getClientOriginalName());
-            //asignamos de nuevo el nombre de la imagen completo
-            $miImg = $file->getClientOriginalName();
-            //mientras el archivo exista iteramos y aumentamos i
-            while(file_exists('images/categorias/'.$miImg)){
-                $i++;
-                $miImg = $info[0]."(".$i.")".".".$info[1];              
-            }
-            //guardamos la imagen con otro nombre ej foto(1).jpg || foto(2).jpg etc
-            $file->move("images/categorias/",$miImg);
-            $img = Image::make('images/categorias/'.$miImg);
-            if ($img->width() > $img->height()) {
-				$img->widen(300);
-			}else
-			{
-				$img->heighten(300);
-			}
-			$blank = Image::make('images/b200.jpg');
-			$blank->insert($img,'center')
-	           ->interlace()
-	           ->save('images/categorias/'.$miImg);
-            if($miImg != $file->getClientOriginalName()){
-            	$subcat->img = $miImg;
-            }
-		}else
-		{
-			$file->move("images/categorias/",$file->getClientOriginalName());
-			$img = Image::make('images/categorias/'.$file->getClientOriginalName());
-            if ($img->width() > $img->height()) {
-				$img->widen(300);
-			}else
-			{
-				$img->heighten(300);
-			}
-			$blank = Image::make('images/b200.jpg');
-			$blank->insert($img,'center')
-			->interlace()
-            ->save('images/categorias/'.$file->getClientOriginalName());
-            $subcat->img = $file->getClientOriginalName();
-		}
-		
-		if ($subcat->save()) {
-			Session::flash('success', 'Sub-categoría creada satisfactoriamente.');
-			return Redirect::to('administrador/inicio');
-		}else
-		{
-			Session::flash('error', 'Error al guardar la nueva sub-categoría.');
-			return Redirect::to('categoria/nueva-sub-categoria');
-		}
-	}
-	public function getModifySubCat()
-	{
-		$title = "Ver sub-categorías";
-		$subcat = SubCat::join('categorias as c','c.id','=','subcat.cat_id')
-		->where('c.deleted','=',0)
-		->where('subcat.deleted','=',0)
-		->get(array(
-			'c.id as cat_id',
-			'c.cat_desc',
-			'subcat.sub_nomb',
-			'subcat.sub_desc',
-			'subcat.id'
-
-		));
-		return View::make('admin.showSubCat')
-		->with('title',$title)
-		->with('subcat',$subcat);
-	}
-	public function getModifySubCatById($id)
-	{
-		$subcat = SubCat::find($id);
-		$cat    = Cat::where('deleted','=',0)->get();
-		$title ="Modificar color: ".$subcat->sub_nomb;
-		return View::make('admin.mdfSubCat')
-		->with('title',$title)
-		->with('subcat',$subcat)
-		->with('cat',$cat);
-	}
-	public function postModifySubCatById($id)
-	{
-		$input = Input::all();
-		$rules = array(
-			'cat'		  => 'required',
-			'name_subcat' => 'required',
-			'desc_subcat' => 'required'
-		);
-		$msg = array('required' => 'El campo :attribute es obligatorio');
-		$attr = array('cat' => 'categoría','name_color' => 'nombre','desc_color' =>'título');
-		$validator = Validator::make($input, $rules, $msg, $attr);
-		if ($validator->fails()) {
-			return Redirect::to('administrador/ver-sub-categoria/'.$id)->withErrors($validator)->withInput();
-		}
-		$subcat = SubCat::find($id);
-		$subcat->cat_id   = $input['cat'];
-		$subcat->sub_nomb = $input['name_subcat'];
-		$subcat->sub_desc = $input['desc_subcat'];
-		if (Input::hasFile('img')) {
-			$file = Input::file('img');
-			if (file_exists('images/categorias/'.$file->getClientOriginalName())) {
-				//guardamos la imagen en public/imgs con el nombre original
-	            $i = 0;//indice para el while
-	            //separamos el nombre de la img y la extensión
-	            $info = explode(".",$file->getClientOriginalName());
-	            //asignamos de nuevo el nombre de la imagen completo
-	            $miImg = $file->getClientOriginalName();
-	            //mientras el archivo exista iteramos y aumentamos i
-	            while(file_exists('images/categorias/'.$miImg)){
-	                $i++;
-	                $miImg = $info[0]."(".$i.")".".".$info[1];              
-	            }
-	            //guardamos la imagen con otro nombre ej foto(1).jpg || foto(2).jpg etc
-	            $file->move("images/categorias/",$miImg);
-	            $img = Image::make('images/categorias/'.$miImg);
-	            if ($img->width() > $img->height()) {
-					$img->widen(300);
-				}else
-				{
-					$img->heighten(300);
-				}
-				$blank = Image::make('images/b200.jpg');
-				$blank->insert($img,'center')
-		           ->interlace()
-		           ->save('images/categorias/'.$miImg);
-	            if($miImg != $file->getClientOriginalName()){
-	            	$subcat->img = $miImg;
-	            }
-			}else
-			{
-				$file->move("images/categorias/",$file->getClientOriginalName());
-				$img = Image::make('images/categorias/'.$file->getClientOriginalName());
-	            if ($img->width() > $img->height()) {
-					$img->widen(300);
-				}else
-				{
-					$img->heighten(300);
-				}
-				$blank = Image::make('images/b200.jpg');
-				$blank->insert($img,'center')
-				->interlace()
-	            ->save('images/categorias/'.$file->getClientOriginalName());
-	            $subcat->img = $file->getClientOriginalName();
-			}
-		}
-		if ($subcat->save()) {
-			Session::flash('success', 'Sub-categoría modificada satisfactoriamente.');
-			return Redirect::back();
-		}else
-		{
-			Session::flash('error', 'Error al modificar la sub-categoría.');
-			return Redirect::back();
-		}
-	}
-	public function postElimSubCat()
-	{
-		if (Request::ajax()) {
-			$id = Input::get('id');
-			$subcat = SubCat::find($id);
-			$subcat->deleted = 1;
-			$subcat->save();
-			return Response::json(array('type' => 'success','msg' => 'Categoría eliminada correctamente'));
-		}
-	}
+	
 	public function getNewAdmin()
 	{
 		$title = "Crear nuevo administrador";
@@ -1060,157 +739,12 @@ class AdminController extends BaseController {
 
 		}
 	}
-	public function getNewPub()
-	{
-		$title = "Nueva publicidad";
-		return View::make('admin.newPub')->with('title',$title);
-	}
-	public function getNewPromotion()
-	{
-		$title ="Nueva promocion";
-		return View::make('admin.newPromotion')->with('title',$title);
-	}
-	public function getPosPromotion($pos)
-	{
-		$title = "Modificar promocion";
-		$prom = Publicidad::where('position','=',$pos)->first();
-		return View::make('admin.mdfProm')
-		->with('title',$title)
-		->with('prom',$prom);
-	}
-	public function postProcPub()
-	{
-		$id = Input::get('pos');
-		$inp = Input::all();
-		$prom = Publicidad::find($id);
-		if (Input::hasFile('img')) {
-			$file = Input::file('img');
-			if (file_exists('images/pub/'.$file->getClientOriginalName())) {
-				//guardamos la imagen en public/imgs con el nombre original
-	            $i = 0;//indice para el while
-	            //separamos el nombre de la img y la extensión
-	            $info = explode(".",$file->getClientOriginalName());
-	            //asignamos de nuevo el nombre de la imagen completo
-	            $miImg = $file->getClientOriginalName();
-	            //mientras el archivo exista iteramos y aumentamos i
-	            while(file_exists('images/pub/'.$miImg)){
-	                $i++;
-	                $miImg = $info[0]."(".$i.")".".".$info[1];              
-	            }
-	            //guardamos la imagen con otro nombre ej foto(1).jpg || foto(2).jpg etc
-	            $file->move("images/pub/",$miImg);
-				$img = Image::make('images/pub/'.$miImg);
-				if ($img->width() > $img->height()) {
-					$img->widen(200);
-				}else
-				{
-					$img->heighten(200);
-				}
-				$blank = Image::make('images/blank2.jpg');
-				$blank->insert($img,'center')
-	           ->interlace()
-	           ->save('images/pub/'.$miImg);
-	            if($miImg != $file->getClientOriginalName()){
-	            	$prom->image = $miImg;
-	            }
-			}else
-			{
-				$file->move("images/pub/",$file->getClientOriginalName());
-				$img = Image::make('images/pub/'.$file->getClientOriginalName());
-				if ($img->width() > $img->height()) {
-					$img->widen(200);
-				}else
-				{
-					$img->heighten(200);
-				}
-				$blank = Image::make('images/blank2.jpg');
-		        $blank->insert($img,'center')
-	            ->interlace()
-            	->save('images/pub/'.$file->getClientOriginalName());
-				
-				
-	          	$prom->image = $file->getClientOriginalName();
-			}
-		}
-		if (!empty($inp['descuento'])) {
-			$prom->percent = $inp['descuento'];		
-		}
-		if (Input::has('active')) {
-			$prom->active = 1;
-		}else
-		{			
-			$prom->active = 0;
-			$items = Items::where('deleted','=',0)->where('item_prom','=',$prom->id)->get();
-			foreach($items as $i)
-			{
-				$i->item_prom = 0;
-				$i->save();
-			}
-		}
-		if ($prom->save()) {
-			Session::flash('success', 'Promocion editada satisfactoriamente.');
-			return Redirect::to('administrador/promocion/agregar-quitar-articulos/'.$id);
-		}else
-		{
-			Session::flash('error', 'Error al guardar la promocion');
-			return Redirect::back();
-		}
-	}
-	public function getAddDelItemProm($id)
-	{
-		$title = "Agregar/Quitar items";
-		$prom = Publicidad::find($id);
-		$b = Items::where('deleted','=','0')
-		->where(function($query) use ($id)
-		{
-			$query->where('item_prom','=',0)
-			->orWhere('item_prom','=',$id);
-		})
-		->get(array('item_cod','id','item_prom'));
-		$item = array();
-		$i = 0;
-		foreach($b as $a){
-			$aux		= Misc::where('item_id','=',$a->id)->where('deleted','=',0)->first();
-			$b->img[$i]	= Images::where('misc_id','=',$aux->id)->where('deleted','=',0)->pluck('image'); 
-			$item[$i] 	= $b;
-			$i++;
-
-		}
-		return View::make('admin.mdfPromItem')
-		->with('title',$title)
-		->with('prom',$prom)
-		->with('items',$item);
-
-	}
-	public function postAddDelItemProm()
-	{
-		$id   = Input::get('id');
-		$val  = Input::get('val');
-		$item = Items::where('id','=',$id)->first();
-		$item->item_prom = $val;
-		if($item->save())
-		{
-			return Response::json(array('type' => 'success','msg' => 'Articulo agregado satisfactoriamente.'));
-		}else
-		{
-			return Response::json(array('type' => 'danger','msg' => 'Error al agregar el articulo.'));
-		}
-	}
-	
 	public function postElimItem()
 	{
 		$id = Input::get('id');
 		$item = Items::find($id);
-		$misc = Misc::where('item_id','=',$id)->first();
-		$img  = Images::where('misc_id','=',$misc->id)->get();
 		$item->deleted = 1;
-		$misc->deleted = 1;
-		foreach ($img as $i) {
-			$i->deleted = 1;
-			$i->save();
-		}
-		
-		if($item->save() && $misc->save())
+		if($item->save())
 		{
 			return Response::json(array('type' => 'success','msg' => 'Articulo eliminado satisfactoriamente'));
 		}else
@@ -1239,69 +773,7 @@ class AdminController extends BaseController {
 			return Response::json(array('type' =>'danger','msg' =>'Error al eliminar el articulo'));
 		}
 	}
-	public function getMdfItem($id)
-	{
-		$item = Items::find($id);
-		$misc = Misc::where('item_id','=',$item->id)->get();
-		$aux = array();
-		$j = 0;
-		foreach ($misc as $m) {
-			$aux[$j] = Images::where('misc_id','=',$m->id)->where('deleted','=',0)->get();
-			$j++;
-		}
-		$item->img = $aux;
-		
-		$item->misc = $misc;
-		$title = "Modificar articulo: ".$item->item_nomb;
-
-		$cat = Cat::where('deleted','=',0)->get();
-		$tallas = Tallas::where('deleted','=',0)->get();
-		$colors = Colores::where('deleted','=',0)->get();
-		return View::make('admin.mdfItem')
-		->with('title',$title)
-		->with('item',$item)
-		->with('cat',$cat)
-		->with('tallas',$tallas)
-		->with('colores',$colors);
-	}
-	public function postMdfItem()
-	{
-		$inp = Input::all();
-		$rules = array(
-			'item_cod'  	=> 'required',
-			'item_nomb' 	=> 'required',
-			'item_desc' 	=> 'required',
-			'item_precio' 	=> 'required',
-		);
-		$msg = array(
-			'required' => 'El campo no debe estar vacio'
-		);
-		$validator = Validator::make($inp, $rules, $msg);
-		if ($validator->fails()) {
-			return Redirect::back()->withErrors($validator);
-		}
-		$item = Items::find($inp['item']);
-
-		if (!empty($inp['cat'])) {
-			$item->item_cat = $inp['cat'];
-		}
-		if (!empty($inp['subcat'])) {
-			$item->item_subcat = $inp['subcat'];
-		}
-		$item->item_cod  	= $inp['item_cod'];
-		$item->item_nomb 	= $inp['item_nomb'];
-		$item->item_desc 	= $inp['item_desc'];
-		$item->item_precio	= $inp['item_precio'];
-
-		if ($item->save()) {
-			Session::flash('success', 'Articulo modificado satisfactoriamente.');
-			return Redirect::to('administrador/ver-articulo');
-		}else
-		{
-			Session::flash('dager', 'Error al modificar el articulo.');
-			return Redirect::back();
-		}
-	}
+	
 	public function postMdfMisc()
 	{
 		$inp = Input::all();

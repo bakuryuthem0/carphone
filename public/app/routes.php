@@ -27,21 +27,19 @@ Route::group(array('before' => 'check_auth'),function()
 		Route::get('editar-marca/{id}','AdminController@getModifyCatById');
 		Route::post('modificar-marca/{id}/enviar','AdminController@postModifyCatById');
 		Route::post('marca/eliminar','AdminController@postElimCat');
-		//colores
-		Route::get('color/nuevo','AdminController@getNewColor');
-		Route::post('color/nuevo/enviar','AdminController@postNewColor');
-		Route::get('color/ver-colores','AdminController@getModifyColor');
-		Route::get('color/editar-color/{id}','AdminController@getModifyColorById');
-		Route::post('color/modificar-color/{id}/enviar','AdminController@postModifyColorById');
-		Route::post('color/eliminar','AdminController@postElimColor');
+		
 		//articulos
 		Route::get('articulo/nuevo','AdminController@getNewItem');
 		Route::post('articulo/nuevo/enviar','AdminController@postNewItem');
 		Route::get('articulo/nuevo-articulo/continuar/{id}','AdminController@getContinueNew');
-		Route::get('articulo/ver-articulos','AdminController@getModifyColor');
-		Route::get('articulo/editar-articulos/{id}','AdminController@getModifyColorById');
-		Route::post('articulo/modificar-articulos/{id}/enviar','AdminController@postModifyColorById');
-		Route::post('articulo/eliminar','AdminController@postElimColor');
+		Route::post('articulo/nuevo-articulo/imagenes/procesar','AdminController@post_upload');
+		Route::post('articulo/imagenes/eliminar','AdminController@postDeleteImg');
+		Route::get('articulo/ver-articulos','AdminController@getShowArt');
+		Route::get('articulo/editar-articulo/{id}','AdminController@getMdfItem');
+		Route::post('articulo/editar-articulo/{id}/enviar','AdminController@postMdfItem');
+		Route::post('articulo/color/eliminar','AdminController@postElimItemColor');
+		Route::post('articulo/eliminar','AdminController@postElimItem');
+		Route::post('articulo/imagenes/eliminar','AdminController@postDeleteImgMdf');
 
 
 	});
