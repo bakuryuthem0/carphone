@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="container">
 		<div class="col-xs-12 contCentrado contDeColor">
-			<form method="POST" action="{{ URL::to('articulo/nuevo/enviar') }}" enctype="multipart/form-data">
+			<form method="POST" action="{{ URL::to('articulo/nuevo/enviar') }}" enctype="multipart/form-data" class="form">
 				<legend>Nuevo articulo</legend>
 
 				<p class="textoPromedio">(*) Campo obligatorio</p>
@@ -99,7 +99,7 @@
 				</div>
 				<div class="col-xs-12 col-md-6 inputForm">	
 					<label class="textoPromedio">(*) Cantidad de artículos</label>
-					{{ Form::text('item_stock', Input::old('item_nomb'), array('class' => 'form-control','placeholder' => 'Cantidad de artículos')) }}
+					{{ Form::text('item_stock', Input::old('item_stock'), array('class' => 'form-control','placeholder' => 'Cantidad de artículos')) }}
 					@if ($errors->has('item_stock'))
 						 @foreach($errors->get('item_stock') as $err)
 						 	<div class="alert alert-danger">
@@ -108,6 +108,22 @@
 						 	</div>
 						 @endforeach
 					@endif
+				</div>
+				<div class="newColor col-xs-12 no-padding hidden" id="item_2">
+					<div class="col-xs-12 col-md-4 inputForm contColorClon">	
+						<label class="textoPromedio">Color</label>
+						<input name="item_colorNuevo[2]" type="text" class="inputColor form-control" placeholder="Precio del artículo">
+					</div>
+					<div class="col-xs-12 col-md-4 inputForm contStockClon">	
+						<label class="textoPromedio">Cantidad de artículos</label>
+						<input name="item_stockNuevo[2]" type="text" class="inputStock form-control" placeholder="Cantidad de artículos">
+					</div>
+					<div class="col-xs-12 col-md-4 inputForm contDelButton">	
+						<button class="btn btn-default borrarColor" data-target="#item_2"><i class="fa fa-times"></i> Borrar</button>
+					</div>
+				</div>
+				<div class="newColorBut col-xs-12 inputForm">
+					<button class="btn btn-default addColor"><i class="fa fa-plus"></i> Agregar Color</button>
 				</div>
 				<div class="col-xs-12 col-md-12 inputForm">	
 					<label class="textoPromedio">Imagen Principal</label>

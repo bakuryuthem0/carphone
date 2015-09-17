@@ -36,4 +36,29 @@ jQuery(document).ready(function($) {
 	$('.modal').on('hide.bs.modal', function(event) {
 		$('.to-elim').removeClass('to-elim');
 	});
+	$('.addColor').on('click', function(event) {
+		event.preventDefault()
+		var cont = $('.newColor.hidden:last');
+		var prevId = cont.attr('id');
+		var newId  = 'item_'+(parseInt(prevId.substr(-1))+1);
+		var clon   = cont.clone();
+		cont.removeClass('hidden');
+		cont.after(clon)
+		clon.removeAttr('id').attr('id',newId).addClass('hidden');
+		var colorInput = clon.children('.contColorClon').children('.inputColor');
+		var stockInput = clon.children('.contStockClon').children('.inputStock');
+
+		var colorNamePrev = parseInt(colorInput.attr('name').slice(16,colorInput.attr('name').length-1))+1;
+		var stockNamePrev = parseInt(stockInput.attr('name').slice(16,stockInput.attr('name').length-1))+1;
+
+		colorInput.attr('name','item_colorNuevo['+colorNamePrev+']');
+		stockInput.attr('name','item_stockNuevo['+stockNamePrev+']');
+		clon.children('.contDelButton').children('.borrarColor').attr('data-target','#'+newId);
+		$('.borrarColor').bind('click')
+	});
+	$('body').on('click', '.borrarColor',function(event) {
+		event.preventDefault();
+		var target = $(this).data('target');
+		$(target).remove();
+	});
 });

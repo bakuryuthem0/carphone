@@ -24,6 +24,14 @@
 	margin: 1em auto;
     
 }
+.no-padding
+{
+    padding: 0;
+}
+.borrarColor
+{
+    margin-top: 8%;
+}
 .dropdown-submenu {
     position: relative;
 }

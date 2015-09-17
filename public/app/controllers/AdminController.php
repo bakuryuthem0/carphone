@@ -131,6 +131,7 @@ class AdminController extends BaseController {
 	public function postNewItem()
 	{
 		$input = Input::all();
+
 		$rules = array(
 			'cat'    		 => 'required',
 			'item_cod'  	 => 'required|unique:items',
@@ -175,7 +176,21 @@ class AdminController extends BaseController {
 			$color->nombre  	= $input['color'];
 			$color->item_stock  = $input['item_stock'];
 			$color->save();
-
+			if(Input::has('item_colorNuevo') && Input::has('item_stockNuevo'))
+			{
+				$colorNew = Input::get('item_colorNuevo');
+				$stockNew = Input::get('item_stockNuevo');
+				foreach ($colorNew as $i => $c) {
+					if(!empty($c) && !empty($stockNew[$i]))
+					{
+						$color = new Colores;
+						$color->item_id 	= $id;
+						$color->nombre  	= $c;
+						$color->item_stock  = $stockNew[$i];
+						$color->save();
+					}
+				}
+			}
 			$img = Input::file('img1');
 			$this->saveImage($id,$img);
 
