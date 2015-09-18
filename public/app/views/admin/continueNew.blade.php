@@ -5,13 +5,10 @@
 <div class="row">
 	<div class="container">
 		<div class="col-xs-12 contCentrado contDeColor">
-			<div class="col-xs-12">
-				<legend>Seleccione las caracteristicas del articulo</legend>
-			</div>
 			<div class="col-xs-12 inputForm">
                 <legend style="text-align:center;">Agregar las imágenes.</legend>
                 <p class="textoPromedio">Arrastre imágenes en el cuadro o presione en él para así cargar las imágenes.</p>
-                <p class="textoPromedio">Recuerde que posee un límite para 8 imágenes adicionales.</p>
+                <p class="textoPromedio">Recuerde que posee un límite para 8 imágenes por operación.</p>
                 <div id="dropzone">
                     <form action="{{ URL::to('articulo/nuevo-articulo/imagenes/procesar') }}" method="POST" class="dropzone textoPromedio" id="my-awesome-dropzone">
                         <div class="dz-message">

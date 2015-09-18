@@ -186,10 +186,11 @@
 								<p class="bg-info textoPromedio" style="padding:0.5em;">Recuerde que para modificar las imagenes, debe de ser de una en vez. </p>
 							</div>
 							<div class="col-xs-12 formulario">
-								<a href="{{ URL::to('administrador/cambiar-posicion/'.$item->id) }}" class="btn btn-primary">
-									Cambiar orden de las imagenes.
+								<a href="{{ URL::to('articulo/agregar-imagenes/'.$item->id) }}" class="btn btn-primary">
+									Agregar imagenes (Se recomienda un maximo de 8 imagenes);
 								</a>
-							</div>
+							</div> 
+
 							<div class="clearfix"></div>
 							<div class="alert responseDanger">
 								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -203,9 +204,6 @@
 										Imagen
 									</th>
 									<th>
-										Cambiar
-									</th>
-									<th>
 										Eliminar
 									</th>
 								</thead>
@@ -214,7 +212,6 @@
 										<tr>
 											<td>{{ $i->id }}</td>
 											<td><img src="{{ asset('images/items/'.$i->image) }}" class="imgItem"></td>
-											<td><a href="{{ URL::to('articulo/editar-imagen/'.$i->id) }}" class="btn btn-xs btn-warning">Cambiar</a></td>
 											<td><button class="btn btn-xs btn-danger elimBtn" data-toggle="modal" data-target="#modalElim" data-url="{{ URL::to('articulo/imagenes/eliminar') }}" value="{{ $i->id }}">Eliminar</button></td>
 										</tr>
 									@endforeach
