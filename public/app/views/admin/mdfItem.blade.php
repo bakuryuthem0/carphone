@@ -141,12 +141,31 @@
 								</div>
 							</div>
 							@endforeach
-							</form>
+							<div class="newColor col-xs-12 contdeColor hidden" id="item_{{ $colores[count($colores)-1]->id+1 }}">
+								<div class="col-xs-12 col-md-4 inputForm contColorClon">	
+									<label class="textoPromedio">Color</label>
+									<input name="item_colorNuevo[{{ $colores[count($colores)-1]->id+1 }}]" type="text" class="inputColor form-control" placeholder="Precio del artículo" value="">
+								</div>
+								<div class="col-xs-12 col-md-4 inputForm contStockClon">	
+									<label class="textoPromedio">Cantidad de artículos</label>
+									<input name="item_stockNuevo[{{ $colores[count($colores)-1]->id+1 }}]" type="text" class="inputStock form-control" placeholder="Cantidad de artículos" value="">
+								</div>
+								<div class="col-xs-12 col-md-4 inputForm contDelButton">	
+									<button class="btn btn-default borrarColor" data-target="#item_{{ $colores[count($colores)-1]->id+1 }}"><i class="fa fa-times"></i> Borrar</button>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<div class="newColorBut col-xs-12 inputForm">
+									<button type="button" class="btn btn-default addColor"><i class="fa fa-plus"></i> Agregar Color</button>
+								</div>
+							</div>
+							<input type="hidden" name="item_id" value="{{ $item->id }}">
 							<div class="col-xs-12">
 								<div class="col-xs-12">
 									<button class="btn btn-success btnSendColors">Enviar</button>
 								</div>
 							</div>
+							</form>
 						</div>
 			      </div>
 			    </div>

@@ -64,6 +64,6 @@ jQuery(document).ready(function($) {
 		$(target).remove();
 	});
 	$('.btnSendColors').on('click', function(event) {
-		
+		$('.elimColorForm').submit();
 	});
 });

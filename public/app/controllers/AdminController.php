@@ -327,7 +327,28 @@ class AdminController extends BaseController {
 	public function postModifyItemColors()
 	{
 		$inp = Input::all();
-		return $inp;
+
+		foreach($inp['item_colorNuevo'] as $i => $c)
+		{
+			if (!empty($c) && !empty($inp['item_stockNuevo'][$i])) {
+				$color = Colores::find($i);
+				if(!is_null($color))
+				{
+					$color->nombre 		= $c;
+					$color->item_stock  = $inp['item_stockNuevo'][$i];
+					$color->save();
+				}else
+				{
+					$color = new Colores;
+					$color->item_id		= $inp['item_id'];
+					$color->nombre 		= $c;
+					$color->item_stock  = $inp['item_stockNuevo'][$i];
+					$color->save();
+				}
+			}
+
+		}
+		return Redirect::back();
 	}
 	public function getNewMarca()
 	{
