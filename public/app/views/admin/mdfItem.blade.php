@@ -122,6 +122,10 @@
 			      <div class="panel-body">
 			    	   <div class="col-xs-12" style="margin-top:2em;padding:0px;">
 			    	   		<p class="alert bg-info"><i class="fa fa-exclamation-triangle"></i> En caso de que no desee modificar una categoría, omitir el campo</p>
+			    	   		<div class="alert responseDanger">
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							</div>
+							<form method="post" action="{{ URL::to('articulo/modificar-colores') }}" class="elimColorForm">
 							@foreach($colores as $c)
 							<div class="newColor col-xs-12 contdeColor" id="item_{{ $c->id }}">
 								<div class="col-xs-12 col-md-4 inputForm contColorClon">	
@@ -133,10 +137,16 @@
 									<input name="item_stockNuevo[{{ $c->id }}]" type="text" class="inputStock form-control" placeholder="Cantidad de artículos" value="{{ $c->item_stock }}">
 								</div>
 								<div class="col-xs-12 col-md-4 inputForm contDelButton">	
-									<button class="btn btn-default elimBtn" data-toggle="modal" data-target="#modalElim" data-url="{{ URL::to('articulo/color/eliminar') }}" value="{{ $c->id }}"><i class="fa fa-times"></i> Borrar</button>
+									<button type="button" class="btn btn-default elimBtn" data-toggle="modal" data-target="#modalElim" data-url="{{ URL::to('articulo/color/eliminar') }}" value="{{ $c->id }}"><i class="fa fa-times"></i> Borrar</button>
 								</div>
 							</div>
 							@endforeach
+							</form>
+							<div class="col-xs-12">
+								<div class="col-xs-12">
+									<button class="btn btn-success btnSendColors">Enviar</button>
+								</div>
+							</div>
 						</div>
 			      </div>
 			    </div>

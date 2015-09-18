@@ -15,6 +15,7 @@ function elimSomethig(id,url) {
 			$('.responseDanger').addClass('alert-'+response.type).html(response.msg).show('fast');
 			if (response.type == 'success') {
 				$('.to-elim').parent('td').parent('tr').remove();
+				$('.to-elim').parent('div').parent('div').remove();
 			};
 			$('.modal').modal('hide');
 			setTimeout(function() {
@@ -25,6 +26,7 @@ function elimSomethig(id,url) {
 	
 }
 jQuery(document).ready(function($) {
+	$('.elimColorForm').unbind('submit');
 	$('.elimBtn').on('click',function(event) {
 		$(this).addClass('to-elim');
 		$('.envElim').val($(this).val())
@@ -60,5 +62,8 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 		var target = $(this).data('target');
 		$(target).remove();
+	});
+	$('.btnSendColors').on('click', function(event) {
+		
 	});
 });

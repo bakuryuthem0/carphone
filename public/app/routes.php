@@ -38,6 +38,7 @@ Route::group(array('before' => 'check_auth'),function()
 		Route::get('articulo/editar-articulo/{id}','AdminController@getMdfItem');
 		Route::post('articulo/editar-articulo/{id}/enviar','AdminController@postMdfItem');
 		Route::post('articulo/color/eliminar','AdminController@postElimItemColor');
+		Route::post('articulo/modificar-colores','AdminController@postModifyItemColors');
 		Route::post('articulo/eliminar','AdminController@postElimItem');
 		Route::post('articulo/imagenes/eliminar','AdminController@postDeleteImgMdf');
 

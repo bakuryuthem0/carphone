@@ -77,7 +77,7 @@
                                 </a>
                               </li>
                               <li>
-                                <a href="{{ URL::to('administrador/ver-articulo') }}">
+                                <a href="{{ URL::to('articulo/ver-articulos') }}">
                                   Ver articulos
                                 </a>
                               </li>

@@ -315,6 +315,20 @@ class AdminController extends BaseController {
 			return Redirect::back();
 		}
 	}
+	public function postElimItemColor()
+	{
+		$id = Input::get('id');
+		$colores = Colores::find($id);
+		$colores->deleted = 1;
+		if ($colores->save()) {
+			return Response::json(array('type' => 'success','msg' => 'Color eliminado satisfactoriamente'));
+		}
+	}
+	public function postModifyItemColors()
+	{
+		$inp = Input::all();
+		return $inp;
+	}
 	public function getNewMarca()
 	{
 		$title ="Nueva Marca";
