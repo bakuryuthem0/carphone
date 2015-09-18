@@ -12,7 +12,11 @@
 */
 
 Route::get('/','HomeController@getIndex');
+
+//telefono
 Route::get('telefonos','HomeController@getPhones');
+Route::get('ver-articulo/{id}','HomeController@getArtSelf');
+//admin
 Route::get('administrador','AdminController@getAdminLogin');
 Route::post('administrador/iniciar-sesion/autenticar','AdminController@postAdminLogin');
 
@@ -39,6 +43,7 @@ Route::group(array('before' => 'check_auth'),function()
 		Route::post('articulo/editar-articulo/{id}/enviar','AdminController@postMdfItem');
 		Route::post('articulo/color/eliminar','AdminController@postElimItemColor');
 		Route::post('articulo/modificar-colores','AdminController@postModifyItemColors');
+		Route::get('articulo/agregar-imagenes/{id}','AdminController@getContinueNew');
 		Route::post('articulo/eliminar','AdminController@postElimItem');
 		Route::post('articulo/imagenes/eliminar','AdminController@postDeleteImgMdf');
 
