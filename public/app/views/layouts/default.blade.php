@@ -13,6 +13,11 @@
 	{{ HTML::style('css/main.css') }}
 	{{ HTML::style('css/responsive.css') }}
 	{{ HTML::style('css/custom.css') }}
+	{{ HTML::style('js/quickaddtocart/css/style.css') }}
+	{{ HTML::style('js/cart/css/style.css') }}
+	{{ HTML::style('js/toast/build/toastr.min.css') }}
+	{{ HTML::script('js/quickaddtocart/js/modernizr.js') }}
+	<link rel="stylesheet" href=""> <!-- Gem style -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -67,9 +72,20 @@
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
 								@if(Auth::check())
-									<li><a href="#"><i class="fa fa-star"></i> Lista de Deseos</a></li>
-									<li><a href="cart. html"><i class="fa fa-shopping-cart"></i> Carrito</a></li>
-									<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Pagar</a></li>
+									<li><a href="#!" id="cd-cart-trigger"><i class="fa fa-shopping-cart"></i> Carrito</a></li>
+									<li>
+										<ul class="nav navbar-nav collapse navbar-collapse profile">
+											<li class="dropdown">
+												<a href="#!"><i class="fa fa-user"></i> Perfil</a></a>
+			                                    <ul role="menu" class="sub-menu">
+			                                        <li><a href="">Cambiar Contraseña</a></li>
+													<li><a href="{{ URL::to('usuario/ver-compras') }}">Ver Compras</a></li> 
+			                                    </ul>
+			                                </li> 
+											
+											<li><a href="contact-us.html">Contact</a></li>
+										</ul>
+									</li>
 									<li><a href="{{ URL::to('cerrar-sesion') }}"><i class="fa fa-sign-out"></i> Cerrar Sesión</a></li>
 								@else
 									<li><a href="{{ URL::to('registrarse') }}"><i class="fa fa-user"></i> Registrarse</a></li>
@@ -213,6 +229,91 @@
 		</div>
 		
 	</footer><!--/Footer-->
+	<div id="cd-shadow-layer"></div>
+
+	<div id="cd-cart">
+		<h2>Carrito:</h2>
+
+		<table class="table table-hovered table-centered">
+			<tr>
+				<th>
+					Cantidad
+				</th>
+				<th>
+					Articulo
+				</th>
+				<th>
+					Color
+				</th>
+				<th>
+					Sub-total
+				</th>
+				<th>
+
+				</th>
+			</tr>
+			@if(Cart::count() > 0)
+				@foreach(Cart::content() as $k => $c)
+				<tr class="cartItem" id="item_{{ $c->id.$c->options['color'] }}">
+					<td class="cd-qty">{{ $c->qty }}</td> 
+					<td class="cd-name">{{ $c->name }}</td>
+					<td class="cd-color">{{ $c->options['color_desc'] }}</td>
+					<td class="cd-price">{{ $c->subtotal }}</td>
+					<td>
+						<button class="removeItem btn btn-flat" data-target="#item_{{ $c->id.$c->options['color'] }}" data-color="{{ $c->options['color'] }}" value="{{ $c->id }}">
+							<i class="fa fa-close"></i>
+						</button>
+					</td>
+				</tr>
+				@endforeach
+				
+				<tr class="hidden cartItem">
+					<td class="cd-qty"></td> 
+					<td class="cd-name"></td>
+					<td class="cd-color"></td>
+					<td class="cd-price"></td>
+					<td>
+						<button class="removeItem btn btn-flat" data-target="#item_0">
+							<i class="fa fa-close"></i>
+						</button>
+					</td>
+				</tr>
+			@else
+			<tr>
+				<td class="no-item-td" colspan="4">
+					<div class="alert alert-info">
+						Carrito Vacio					
+					</div>
+				</td>
+			</tr>
+			<tr class="hidden cartItem">
+				<td class="cd-qty"></td> 
+				<td class="cd-name"></td>
+				<td class="cd-color"></td>
+				<td class="cd-price"></td>
+				<td>
+					<button class="removeItem btn btn-flat" data-target="#item_0"><i class="fa fa-close"></i>
+					</button>
+				</td>
+			</tr>
+			@endif
+		</table><!-- cd-cart-items -->
+
+		@if(Cart::count() < 1)
+			<div class="cd-cart-total hidden">
+				<p>Total <span>{{ Cart::total() }}</span></p>
+			</div> <!-- cd-cart-total -->
+			<a href="{{ URL::to('telefono/ver-carrito') }}" class="checkout-btn hidden">Ver carrito</a>
+			<a href="#!" class="vaciar hidden">Vaciar</a>
+		@else
+			<div class="cd-cart-total">
+				<p>Total <span>{{ Cart::total() }}</span></p>
+			</div> <!-- cd-cart-total -->
+			<a href="{{ URL::to('telefono/ver-carrito') }}" class="checkout-btn">Ver carrito</a>
+			<a href="#!" class="vaciar">Vaciar</a>
+		@endif
+		
+	</div> <!-- cd-cart -->
 @if(!Auth::check() && $title != "Iniciar Sesión | Nombre")
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -259,6 +360,12 @@
 	{{ HTML::script('js/price-range.js') }}
 	{{ HTML::script('js/jquery.prettyPhoto.js') }}
 	{{ HTML::script('js/main.js') }}
+	{{ HTML::script('js/quickaddtocart/js/main.js') }}
+	{{ HTML::script('js/cart/js/main.js') }}
+	{{ HTML::script('js/toast/build/toastr.min.js') }}
+
+	@yield('postscript')
+	
 	{{ HTML::script('js/custom.js') }}
 
 </body>

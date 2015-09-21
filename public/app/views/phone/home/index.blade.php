@@ -183,13 +183,16 @@
 							<h2>Brands</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-									<li><a href="#"> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href="#"> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href="#"> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href="#"> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href="#"> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href="#"> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href="#"> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
+									@foreach($marcas as $m)
+										<li><a href="#"> <span class="pull-right">
+												@if(isset($cant[$m->id]))
+													({{ $cant[$m->id] }})
+												@else
+													(0)
+												@endif
+										</span>{{ $m->nombre }}</a></li>
+									@endforeach
+									
 								</ul>
 							</div>
 						</div><!--/brands_products-->
@@ -211,160 +214,120 @@
 				
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
-						<h2 class="title text-center">Features Items</h2>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-										<div class="productinfo text-center">
-											<img src="images/home/product1.jpg" alt="" />
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-										<div class="product-overlay">
-											<div class="overlay-content">
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-											</div>
-										</div>
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+						<h2 class="title text-center">Ultimos Articulos</h2>
+						@foreach($items as $i)
+						<div class="col-sm-4 formulario itemPrinc">
+							<div class="cd-single-item">
+								<a href="#0">
+									<ul class="cd-slider-wrapper">
+										<li class="selected">
+											<img src="{{ asset('images/items/'.$i->image)}}" alt="Preview image">
+										</li>
 									</ul>
-								</div>
-							</div>
+								</a>
+								<div class="cd-item-info">
+									<b><a href="#0">{{ $i->item_cod.' - '.$i->item_nomb }}</a></b>
+									<em>${{ $i->item_prec }}</em>
+								</div> <!-- cd-item-info -->
+								<div class="cd-customization">
+									@if(Auth::check())
+									<div class="col-xs-12 formulario">
+										<select class="colores form-control color_{{ $i->id }}" autocomplete="off">
+											<option value="" selected>Colores:</option>
+											@foreach($colores[$i->id] as $c)
+												<option value="{{ $c->id }}">{{ $c->nombre }} - Stock: {{ $c->item_stock }}</option>
+											@endforeach
+										</select>
+									</div>
+									<button class="add-to-cart addToCart"  data-id="{{ $i->id }}" data-price="{{ $i->item_prec }}" data-img="{{ asset('images/items/'.$i->image) }}" data-name="{{ $i->item_nomb }}" data-cod="{{ $i->item_cod }}" data-color=".color_{{ $i->id }}">
+										<em>Agregar</em>
+										<svg x="0px" y="0px" width="32px" height="32px" viewBox="0 0 32 32">
+											<path stroke-dasharray="19.79 19.79" stroke-dashoffset="19.79" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square" stroke-miterlimit="10" d="M9,17l3.9,3.9c0.1,0.1,0.2,0.1,0.3,0L23,11"/>
+										</svg>
+									</button>
+									@else
+									<a href="{{ URL::to('ver-articulo/'.$i->id) }}" class="btn btn-default">
+										<i class="fa fa-search"></i> Ver
+									</a>
+									<button class="add-to-cart pull-right" data-toggle="modal" data-target="#myModal">
+										<em>Agregar</em>
+									</button>
+									@endif
+								</div> <!-- .cd-customization -->
+							</div> <!-- .cd-single-item -->
 						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product2.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product3.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product4.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-									<img src="images/home/new.png" class="new" alt="" />
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product5.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-									<img src="images/home/sale.png" class="new" alt="" />
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/home/product6.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						
+						@endforeach
+						<nav class="contPaginator" role="navigation">
+				          <?php  $presenter = new Illuminate\Pagination\BootstrapPresenter($items); ?>
+				          @if ($items->getLastPage() > 1)
+				          <ul class="pagination">
+				            <?php
+				              $beforeAndAfter = 2;
+				           
+				              //Página actual
+				              $currentPage = $items->getCurrentPage();
+				           
+				              //Última página
+				              $lastPage = $items->getLastPage();
+				           
+				              //Comprobamos si las páginas anteriores y siguientes de la actual existen
+				              $start = $currentPage - $beforeAndAfter;
+				           
+				                  //Comprueba si la primera página en la paginación está por debajo de 1
+				                  //para saber como colocar los enlaces
+				              if($start < 1)
+				              {
+				                $pos = $start - 1;
+				                $start = $currentPage - ($beforeAndAfter + $pos);
+				              }
+				           
+				              //Último enlace a mostrar
+				              $end = $currentPage + $beforeAndAfter;
+				           
+				              if($end > $lastPage)
+				              {
+				                $pos = $end - $lastPage;
+				                $end = $end - $pos;
+				              }
+				           
+				              //Si es la primera página mostramos el enlace desactivado
+				              if ($currentPage <= 1)
+				              {
+				                echo '<li class="disabled noMovil"><span>&lt;&lt;Primera</span></li>';
+				              }
+				              //en otro caso obtenemos la url y mostramos en forma de link
+				              else
+				              {
+				                $url = $items->getUrl(1);
+				           
+				                echo '<li class="noMovil"><a href="'.$url.'">&lt;&lt; Primera</a></li>';
+				              }
+				           
+				              //Para ir a la anterior
+				              echo '<li class="paraMovil">'.$presenter->getPrevious('&lt; Anterior').'</li>';
+				           
+				              //Rango de enlaces desde el principio al final, 3 delante y 3 detrás
+				              echo $presenter->getPageRange($start, $end);
+				           
+				              //Para ir a la siguiente
+				              echo '<li class="paraMovil">'.$presenter->getNext('Siguiente &gt;').'</li>';
+				           
+				              ////Si es la última página mostramos desactivado
+				              if ($currentPage >= $lastPage)
+				              {
+				                echo '<li class="disabled noMovil"><span>Última</span></li>';
+				              }
+				              //en otro caso obtenemos la url y mostramos en forma de link
+				              else
+				              {
+				                $url = $items->getUrl($lastPage);
+				           
+				                echo '<li class="noMovil"><a href="'.$url.'">Última &gt;&gt;</a></li>';
+				              }
+				              ?>
+				            @endif
+				          </ul>
+				        </nav> <!-- cd-pagination-wrapper -->
 					</div><!--features_items-->
 					
 					<div class="category-tab"><!--category-tab-->
