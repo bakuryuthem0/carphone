@@ -22,6 +22,19 @@ Route::post('administrador/iniciar-sesion/autenticar','AdminController@postAdmin
 
 Route::group(array('before' => 'check_auth'),function()
 {
+	//cart
+	Route::get('telefono/agregar-al-carrito','ItemController@addToCart');
+	Route::get('telefono/vaciar','ItemController@destryoCart');
+	Route::get('telefono/quitar','ItemController@deleteCartItem');
+	Route::get('telefono/ver-carrito','ItemController@getCart');
+	Route::get('telefono/modificar-cantidad','ItemController@modifyCartQty');
+	Route::get('telefono/compra/procesar','ItemController@proceesCart');
+	Route::get('telefono/compra/procesar/{id}','ItemController@getFact');
+	Route::get('telefono/compra/procesar/{id}/enviar','ItemController@proceesPayment');
+
+	//user
+	Route::get('usuario/ver-compras','UserController@getMyPurchases');
+
 	Route::group(array('before' => 'check_admin'),function(){
 		Route::get('administrador/inicio','AdminController@getIndex');
 		//marcas
